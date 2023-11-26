@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Relawan\RelawanController;
 use App\Http\Controllers\Util\IndonesiaAreaController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,3 +45,10 @@ Route::prefix('utility')
                 Route::get('/sub-district', 'subDistrict')->name('sub-district');
             });
     });
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::resource('relawan', RelawanController::class);
+        Route::resource('admin', AdminController::class);
+    });
+});
