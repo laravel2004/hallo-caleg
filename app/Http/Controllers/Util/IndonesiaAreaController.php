@@ -81,7 +81,7 @@ class IndonesiaAreaController extends Controller
             $tps = TPS::where('village_id', $request->id)->get();
             return response()->json([
                 'status' => 'success',
-                'data' => $tps
+                'message' => $tps
             ]);
         }
         catch (Exception $e) {
