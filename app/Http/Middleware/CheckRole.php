@@ -7,16 +7,14 @@ use Illuminate\Http\Request;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, $role)
     {
         if (!$request->user()) {
             return redirect('/auth/login'); 
         }
 
-        foreach ($roles as $role) {
-            if ($request->user()->role === $role) {
-                return $next($request);
-            }
+        if ($request->user()->role === $role) {
+            return $next($request);
         }
 
         return redirect('/')->with('error', 'Unauthorized.');
