@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Service\IndonesiaAreaService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,7 @@ class AuthController extends Controller
     }
 
     public function login() {
+        dd(IndonesiaAreaService::getArea('city', 15));
         return view('pages.auth.login');
     }
 
