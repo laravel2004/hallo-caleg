@@ -29,8 +29,23 @@ class RelawanController extends Controller
                 $data = $this->pendukung->where('user_id', $user->id)->get();
                 return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('pendukung', function($row){
-                    return $row->name.','.$row->nik.','.$row->desa.','.$row->kec.','.$row->detail_alamat.','.$row->tps->name;
+                ->addColumn('name', function($row){
+                    return $row->name;
+                })
+                ->addColumn('nik', function($row){
+                    return $row->nik;
+                })
+                ->addColumn('kec', function($row){
+                    return $row->kec;
+                })
+                ->addColumn('desa', function($row){
+                    return $row->desa;
+                })
+                ->addColumn('detail_alamat', function($row){
+                    return $row->detail_alamat;
+                })
+                ->addColumn('tps', function($row){
+                    return $row->tps->name;
                 })
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="' . route('relawan.address.edit', $row->id) . '" class="btn btn-success edit"><i class="bi bi-pencil-square"></i></a>

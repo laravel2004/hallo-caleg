@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Util;
 
 use App\Http\Controllers\Controller;
+use App\Models\TPS;
 use App\Service\IndonesiaAreaService;
 use Exception;
 use Illuminate\Http\Request;
@@ -65,6 +66,28 @@ class IndonesiaAreaController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Kecamatan tidak ditemukan',
+            ], 404);
+        }
+    }
+
+    public function getTps(Request $request) {
+        if (is_null($request->id)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'TPS Tidak boleh kosong',
+            ], 500);
+        }
+        try {
+            $tps = TPS::where('village_id', $request->id)->get();
+            return response()->json([
+                'status' => 'success',
+                'data' => $tps
+            ]);
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'TPS tidak ditemukan',
             ], 404);
         }
     }

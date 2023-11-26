@@ -34,9 +34,16 @@ class AdminController extends Controller
                 $data = $this->user->where('role', 1)->get();
                 return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('user', function($row){
-                    return $row->name.','.$row->email.','.$row->pendukungs->count();
-                })->addColumn('action', function($row){
+                ->addColumn('name', function($row){
+                    return $row->name;
+                })
+                ->addColumn('email', function($row){
+                    return $row->email;
+                })
+                ->addColumn('count', function($row){
+                    return $row->pendukungs->count();
+                })
+                ->addColumn('action', function($row){
                     $actionBtn = '<a href="' . route('customer.address.edit', $row->id) . '" class="btn btn-success edit"><i class="bi bi-pencil-square"></i></a>
                     <button onclick="handleDelete(' . $row->id . ')" class="btn btn-danger delete"><i class="bi bi-trash"></i></button>';
                         return $actionBtn;
