@@ -20,7 +20,6 @@ class AuthController extends Controller
     }
 
     public function login() {
-        dd(IndonesiaAreaService::getArea('city', 15));
         return view('pages.auth.login');
     }
 
