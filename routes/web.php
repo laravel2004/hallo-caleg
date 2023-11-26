@@ -48,7 +48,11 @@ Route::prefix('utility')
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::resource('relawan', RelawanController::class);
-        Route::resource('admin', AdminController::class);
+        Route::group(['middleware' => 'check-role:0'], function () {
+            Route::resource('admin', AdminController::class);
+        });
+        Route::group(['middleware' => 'check-role:1'], function () {
+            Route::resource('relawan', RelawanController::class);
+        });
     });
 });
