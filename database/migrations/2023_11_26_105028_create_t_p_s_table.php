@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('t_p_s', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->integer('role')->default(0);
-            $table->string('image')->nullable();
-            $table->rememberToken();
+            $table->string('alamat');
+            $table->char('village_code', 7);
             $table->timestamps();
+            $table->foreign('village_code')
+                ->references('code')
+                ->on(config('laravolt.indonesia.table_prefix').'villages')
+                ->onUpdate('cascade')->onDelete('restrict');
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('t_p_s');
     }
 };
