@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('t_p_s', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('alamat');
-            $table->char('village_code', 7);
-            $table->timestamps();
-            $table->foreign('village_code')
-                ->references('code')
-                ->on(config('laravolt.indonesia.table_prefix').'villages')
-                ->onUpdate('cascade')->onDelete('restrict');
-        });
+            Schema::create('t_p_s', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('alamat');
+                $table->unsignedBigInteger('village_id');
+                $table->timestamps();
+
+                $table->foreign('village_id')
+                    ->references('id')
+                    ->on(config('laravolt.indonesia.table_prefix') . 'villages')
+                    ->onDelete('cascade');
+            });
     }
 
     /**

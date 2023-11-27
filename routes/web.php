@@ -43,6 +43,7 @@ Route::prefix('utility')
                 Route::get('/city', 'city')->name('city');
                 Route::get('/district', 'district')->name('district');
                 Route::get('/sub-district', 'subDistrict')->name('sub-district');
+                Route::get('/tps', 'getTps')->name('tps');
             });
     });
 
