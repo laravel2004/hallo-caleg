@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravolt/indonesia": "^0.34.0",
+        "thiagoalessio/tesseract_ocr": "*",
         "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {
@@ -25,6 +26,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "thiagoalessio\\TesseractOCR\\": "app/Libraries/tesseract-ocr-for-php-main/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
