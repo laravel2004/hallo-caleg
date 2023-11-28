@@ -49,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware(['checkRole:0'])->group(function () {
             // relawan
             Route::get('/admin/relawan', [AdminController::class, 'index'])->name('admin.index');
+            // search relawan
+            Route::get('/search-relawan', [AdminController::class, 'searchRelawan'])->name('admin.search.relawan');
             // tambah relawan
             Route::get('/admin/tambah-relawan', [AdminController::class, 'create'])->name('admin.create');
             Route::post('/admin/tambah-relawan', [AdminController::class, 'store'])->name('admin.store');

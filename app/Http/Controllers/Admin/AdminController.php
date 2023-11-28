@@ -27,13 +27,69 @@ class AdminController extends Controller {
 
     public function index(Request $request) {
         try {
-            $relawan = $this->user->where('role', 1)->paginate(10);
-            return view('pages.admin.relawan.index', compact('relawan'));
+            return view('pages.admin.relawan.index');
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function searchRelawan(Request $request) {
+        if ($request->ajax()) {
+            $output = '';
+            $perPage = $request->get('perPage', 10);
+            $query = $request->get('query');
+
+            if ($query != '') {
+                $data = $this->user->where('role', 1)->where(function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('name', 'like', '%' . $query . '%')
+                        ->orWhere('email', 'like', '%' . $query . '%');
+                })
+                    ->paginate($perPage)
+                    ->onEachSide(1);
+            } else {
+                $data = $this->user->where('role', 1)->paginate($perPage)->onEachSide(1);
+            }
+
+            $totalRow = $data->count();
+            if ($totalRow > 0) {
+                foreach ($data as $row) {
+                    $output .= '
+                    <tr class="border-b odd:bg-white even:bg-gray-50">
+                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                            ' . $row->name . '
+                        </th>
+                        <td class="px-6 py-4">
+                            ' . $row->email . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->pendukungs->count() . '
+                        </td>
+                        <td class="flex items-center gap-x-4 px-6 py-4">
+                            <a href="/dashboard/admin/edit/' . $row->id . '" class="font-medium text-blue-600 hover:underline">Edit</a>
+                            <a href="#" onclick="handleDelete(' . $row->id . ')" class="font-medium text-red-600 hover:underline">Delete</a>
+                        </td>
+                    </tr>
+                    ';
+                }
+            } else {
+                $output .= '
+                <tr>
+                    <td colspan="7" class="py-8 text-center text-gray-500">
+                        Tidak ada data yang dapat ditampilkan.
+                    </td>
+                </tr>
+                ';
+            }
+
+            $data = array(
+                'table_data' => $output,
+                'pagination' => $data->links('pagination::tailwind')->toHtml(),
+            );
+
+            return response()->json($data);
         }
     }
 

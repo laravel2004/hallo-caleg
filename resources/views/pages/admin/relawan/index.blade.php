@@ -22,7 +22,7 @@
                 <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
                     <i class='bx bx-search text-xl text-gray-500'></i>
                 </div>
-                <input type="search" id="search" name="search" class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari data disini..." value="{{ old('search') }}">
+                <input type="search" id="search" name="search" class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari data disini...">
             </div>
         </div>
         <div class="relative overflow-x-auto sm:rounded-lg">
@@ -43,41 +43,50 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($relawan as $item)
-                        <tr class="border-b odd:bg-white even:bg-gray-50">
-                            <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                                {{ $item->name }}
-                            </th>
-                            <td class="px-6 py-4">
-                                {{ $item->email }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $item->pendukungs->count() }}
-                            </td>
-                            <td class="flex items-center gap-x-4 px-6 py-4">
-                                <a href="{{ route('dashboard.admin.edit', $item->id) }}" class="font-medium text-blue-600 hover:underline">Edit</a>
-                                <a href="" onclick="handleDelete({{ $item->id }})" class="font-medium text-red-600 hover:underline">Delete</a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="py-8 text-center text-gray-500">
-                                Tidak ada data yang dapat ditampilkan.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $relawan->appends(['search' => request('search'), 'per_page' => request('per_page')])->links('pagination::tailwind') }}
-        </div>
+        <div id="pagination" class="mt-4"></div>
     </div>
 @endsection
 
 @push('script')
     <script>
+        fetchData();
+
+        function fetchData(query = '', page = 1, perPage = 10) {
+            $.ajax({
+                url: "{{ route('dashboard.admin.search.relawan') }}",
+                method: "GET",
+                data: {
+                    query: query,
+                    page: page,
+                    perPage: perPage
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('tbody').html(data.table_data);
+                    $('#pagination').html(data.pagination);
+                }
+            })
+        }
+
+        $(document).on('keyup', '#search', function() {
+            var query = $(this).val();
+            fetchData(query);
+        });
+
+        $(document).on('click', '#pagination a', function(event) {
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            fetchData($('#search').val(), page);
+        });
+
+        $(document).on('change', '#showPerPages', function() {
+            var perPage = $(this).val();
+            fetchData($('#search').val(), 1, perPage);
+        });
+
         function handleDelete(id) {
             swal({
                 title: "Are you sure?",
