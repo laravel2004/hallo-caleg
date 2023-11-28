@@ -45,7 +45,12 @@ Route::prefix('utility')
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::resource('admin', AdminController::class)->middleware('checkRole:0');
+        // Route::resource('admin', AdminController::class)->middleware('checkRole:0');
+        Route::middleware(['checkRole:0'])->group(function () {
+            Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+            Route::post('/admin', [AdminController::class, 'store'])->name('admin.store');
+            Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
+        });
         Route::resource('relawan', RelawanController::class)->middleware('checkRole:1');
     });
 });

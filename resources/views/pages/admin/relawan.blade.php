@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($relawan as $item)
+                    @forelse ($relawan as $item)
                         <tr class="border-b odd:bg-white even:bg-gray-50">
                             <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
                                 {{ $item->name }}
@@ -40,41 +40,26 @@
                                 {{ $item->email }}
                             </td>
                             <td class="px-6 py-4">
-                                Laptop
+                                {{ $item->pendukungs->count() }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="flex items-center gap-x-4 px-6 py-4">
                                 <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
+                                <a href="#" class="font-medium text-red-600 hover:underline">Hapus</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="7" class="py-8 text-center text-gray-500">
+                                Tidak ada data yang dapat ditampilkan.
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="mt-6 flex h-10 justify-end -space-x-px text-base">
-                <li>
-                    <a href="#" class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700">Previous</a>
-                </li>
-                <li>
-                    <a href="#" class="flex h-10 items-center justify-center border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700">1</a>
-                </li>
-                <li>
-                    <a href="#" class="flex h-10 items-center justify-center border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700">2</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page" class="flex h-10 items-center justify-center border border-gray-300 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100 hover:text-blue-700">3</a>
-                </li>
-                <li>
-                    <a href="#" class="flex h-10 items-center justify-center border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700">4</a>
-                </li>
-                <li>
-                    <a href="#" class="flex h-10 items-center justify-center border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700">5</a>
-                </li>
-                <li>
-                    <a href="#" class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700">Next</a>
-                </li>
-            </ul>
-        </nav>
+        <div class="mt-4">
+            {{ $relawan->links('pagination::tailwind') }}
+        </div>
     </div>
     <div id="tambah-relawan" tabindex="-1" aria-hidden="true" class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0">
         <div class="relative max-h-full w-full max-w-md p-4">
@@ -118,7 +103,6 @@
 @endsection
 
 @push('script')
-
     <script>
         $('#add-relawan').on('submit', function(e) {
             e.preventDefault();
@@ -152,5 +136,4 @@
             });
         })
     </script>
-
 @endpush

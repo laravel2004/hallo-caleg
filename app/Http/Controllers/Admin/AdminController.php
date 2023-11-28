@@ -27,9 +27,10 @@ class AdminController extends Controller {
 
     public function index(Request $request) {
         try {
-            $admin = $this->user->where('role', 0)->get();
-            $relawan = $this->user->where('role', 1)->get();
-            return view('pages.admin.relawan', compact('admin', 'relawan'));
+            // $perPage = $request->input('per_page', 1);
+            // $admin = $this->user->where('role', 0)->get();
+            $relawan = $this->user->where('role', 1)->paginate(10);
+            return view('pages.admin.relawan', compact('relawan'));
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -74,7 +75,7 @@ class AdminController extends Controller {
                     'password' => bcrypt($request->password),
                     'role' => $request->input('role'),
                     'image' => $image->hashName(),
-    
+
                 ]);
             } else {
                 $imagePath = null;
@@ -104,7 +105,7 @@ class AdminController extends Controller {
      */
     public function show(string $id) {
         $user = $this->user->find($id);
-        return view('pages.admin.show', compact('user'));
+        // return view('pages.admin.show', compact('user'));
     }
 
     /**
@@ -200,5 +201,11 @@ class AdminController extends Controller {
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function indexPendukung() {
+        $pendukung = Pendukung::paginate(10);
+
+        return view('pages.admin.pendukung', compact('pendukung'));
     }
 }
