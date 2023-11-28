@@ -30,7 +30,7 @@ class AdminController extends Controller {
             // $perPage = $request->input('per_page', 1);
             // $admin = $this->user->where('role', 0)->get();
             $relawan = $this->user->where('role', 1)->paginate(10);
-            return view('pages.admin.relawan', compact('relawan'));
+            return view('pages.admin.relawan.index', compact('relawan'));
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -43,7 +43,7 @@ class AdminController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
-        return view('pages.admin.create');
+        return view('pages.admin.relawan.create');
     }
 
     /**
@@ -113,7 +113,7 @@ class AdminController extends Controller {
      */
     public function edit(string $id) {
         $user = $this->user->find($id);
-        return view('pages.admin.edit', compact('user'));
+        return view('pages.admin.relawan.edit', compact('user'));
     }
 
     /**
@@ -121,38 +121,30 @@ class AdminController extends Controller {
      */
     public function update(Request $request, string $id) {
         try {
-            $validator = Validator($request->all(), [
+            $validator = $request->validate([
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email,' . $id,
-                'password' => 'nullable',
                 'role' => 'required',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => $validator->errors()->first()
-                ]);
-            }
 
             $user = $this->user->find($id);
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
 
-                if ($user->image) {
+                if ($user->image !== null) {
                     Storage::delete('public/profiles/' . $user->image);
                 }
+                $imgName = $image->hashName();
 
-                $imagePath = $image->storeAs('public/profiles', $image->hashName());
-
+                $imagePath = $image->storeAs('public/profiles', $imgName);
                 $user->update([
                     'name' => $request->name,
                     'email' => $request->email,
                     'password' => bcrypt($request->password),
                     'role' => $request->role,
-                    'image' => $image->hashName(),
+                    'image' => $imgName,
                 ]);
             } else {
                 $user->update([

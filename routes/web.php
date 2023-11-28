@@ -47,8 +47,18 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         // Route::resource('admin', AdminController::class)->middleware('checkRole:0');
         Route::middleware(['checkRole:0'])->group(function () {
-            Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-            Route::post('/admin', [AdminController::class, 'store'])->name('admin.store');
+            // relawan
+            Route::get('/admin/relawan', [AdminController::class, 'index'])->name('admin.index');
+            // tambah relawan
+            Route::get('/admin/tambah-relawan', [AdminController::class, 'create'])->name('admin.create');
+            Route::post('/admin/tambah-relawan', [AdminController::class, 'store'])->name('admin.store');
+            // edit relawan
+            Route::get('/admin/edit-relawan/{id}', [AdminController::class, 'edit'])->name('admin.edit');
+            Route::put('/admin/edit-relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
+            // hapus relawan
+            Route::post('/admin/hapus-relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+
+
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
         });
         Route::resource('relawan', RelawanController::class)->middleware('checkRole:1');
