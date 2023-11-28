@@ -27,26 +27,9 @@ class AdminController extends Controller {
 
     public function index(Request $request) {
         try {
-            $data = $this->user->where('role', 0)->get();
-            if ($request->ajax()) {
-                // return DataTables::of($data)
-                //     ->addIndexColumn()
-                //     ->addColumn('name', function ($row) {
-                //         return $row->name;
-                //     })
-                //     ->addColumn('email', function ($row) {
-                //         return $row->email;
-                //     })
-                //     ->addColumn('count', function ($row) {
-                //         return $row->pendukungs->count();
-                //     })
-                //     ->addColumn('action', function ($row) {
-                //         $actionBtn = '<a href="' . route('customer.address.edit', $row->id) . '" class="btn btn-success edit"><i class="bi bi-pencil-square"></i></a>
-                //     <button onclick="handleDelete(' . $row->id . ')" class="btn btn-danger delete"><i class="bi bi-trash"></i></button>';
-                //         return $actionBtn;
-                //     })->toJson();
-            }
-            return view('pages.admin.relawan', compact('data'));
+            $admin = $this->user->where('role', 0)->get();
+            $relawan = $this->user->where('role', 1)->get();
+            return view('pages.admin.relawan', compact('admin', 'relawan'));
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -85,18 +68,25 @@ class AdminController extends Controller {
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imagePath = $image->storeAs('public/profiles', $image->hashName());
+                $post = $this->user->insert([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password),
+                    'role' => $request->input('role'),
+                    'image' => $image->hashName(),
+    
+                ]);
             } else {
                 $imagePath = null;
+                $post = $this->user->insert([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password),
+                    'role' => $request->input('role'),
+                    'image' => null,
+                ]);
             }
 
-            $post = $this->user->create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role' => $request->role,
-                'image' => $image->hashName(),
-
-            ]);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Relawan created successfully',

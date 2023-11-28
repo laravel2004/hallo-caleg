@@ -55,7 +55,7 @@ class AuthController extends Controller {
                 'role' => 'required'
             ]);
 
-            $this->user->create([
+            $this->user->insert([
                 'name' => $validateRequest['name'],
                 'email' => $validateRequest['email'],
                 'password' => bcrypt($validateRequest['password']),
