@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::controller(AuthController::class)
     ->name('auth.')
     ->prefix('/auth')

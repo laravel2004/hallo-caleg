@@ -9,13 +9,11 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller {
 
     private User $user;
 
-    public function __construct(User $user)
-    {
+    public function __construct(User $user) {
         $this->user = $user;
     }
 
@@ -23,32 +21,23 @@ class AuthController extends Controller
         return view('pages.auth.login');
     }
 
-    public function loginPost(Request $request)
-    {
-        try{
+    public function loginPost(Request $request) {
+        try {
             $validateRequest = $request->validate([
                 'email' => 'required|email',
                 'password' => 'required'
             ]);
-    
+
             if (Auth::attempt($validateRequest)) {
                 $request->session()->regenerate();
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Login success',
-                    'role' => Auth::user()->role
-                ], 200);
-            } 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Username or password is incorrect',
-            ], 401) ;
-        }   
-        catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+
+                if (Auth::user()->role == 0) {
+                    return redirect('/dashboard/admin');
+                }
+                return redirect('/dashboard/relawan');
+            }
+        } catch (Exception $e) {
+            return back()->with('error', 'Login gagal!');
         }
     }
 
@@ -57,27 +46,25 @@ class AuthController extends Controller
     }
 
     public function registerPost(Request $request) {
-        try{
+        try {
             $validateRequest = $request->validate([
-                'username' => 'required',
+                'name' => 'required',
                 'email' => 'required|email|unique:users',
                 'password' => 'required',
                 'confirm_password' => 'required|same:password',
                 'role' => 'required'
             ]);
 
-            $user = $this->user->create([
-                'username' => $validateRequest['username'],
+            $this->user->create([
+                'name' => $validateRequest['name'],
                 'email' => $validateRequest['email'],
                 'password' => bcrypt($validateRequest['password']),
                 'role' => $validateRequest['role'],
             ]);
-        }
-        catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+
+            return redirect('/auth/login')->with('success', 'Pendaftaran akun berhasil!');
+        } catch (Exception $e) {
+            return back()->with('error', 'Pendaftaran akun gagal!');
         }
     }
 
@@ -90,8 +77,7 @@ class AuthController extends Controller
                 'status' => 'success',
                 'message' => 'Logout success',
             ]);
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
