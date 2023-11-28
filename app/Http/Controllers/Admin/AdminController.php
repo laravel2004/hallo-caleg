@@ -27,8 +27,6 @@ class AdminController extends Controller {
 
     public function index(Request $request) {
         try {
-            // $perPage = $request->input('per_page', 1);
-            // $admin = $this->user->where('role', 0)->get();
             $relawan = $this->user->where('role', 1)->paginate(10);
             return view('pages.admin.relawan.index', compact('relawan'));
         } catch (Exception $e) {

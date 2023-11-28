@@ -5,9 +5,25 @@
 @section('content')
     <x-sidebar />
     <div class="p-6 sm:ml-64">
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-6 flex items-center justify-between">
             <h1 class="text-3xl font-semibold">Daftar Relawan</h1>
             <a href="{{ route('dashboard.admin.create') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Tambah Relawan</a>
+        </div>
+        <div class="mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-x-4">
+                <p class="flex-grow text-sm">Show per page(s):</p>
+                <select id="showPerPages" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div class="relative flex-shrink">
+                <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                    <i class='bx bx-search text-xl text-gray-500'></i>
+                </div>
+                <input type="search" id="search" name="search" class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari data disini..." value="{{ old('search') }}">
+            </div>
         </div>
         <div class="relative overflow-x-auto sm:rounded-lg">
             <table id="relawan" class="w-full text-left text-sm text-gray-500 rtl:text-right">
@@ -55,7 +71,7 @@
             </table>
         </div>
         <div class="mt-4">
-            {{ $relawan->links('pagination::tailwind') }}
+            {{ $relawan->appends(['search' => request('search'), 'per_page' => request('per_page')])->links('pagination::tailwind') }}
         </div>
     </div>
 @endsection
