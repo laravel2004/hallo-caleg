@@ -52,7 +52,7 @@
                         icon: "success",
                         delay: 1000
                     }).then(() => {
-                        // window.location.href = "{{ route('dashboard.admin.index') }}"
+                        window.location.href = "{{ route('dashboard.admin.index') }}"
                     })
                 },
                 error: function(error) {
