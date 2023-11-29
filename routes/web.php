@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Candidate\CandidateController;
 use App\Http\Controllers\Relawan\RelawanController;
 use App\Http\Controllers\Util\IndonesiaAreaController;
 use Illuminate\Support\Facades\Route;
@@ -60,9 +61,10 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/admin/edit-relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
             // hapus relawan
             Route::delete('/admin/hapus-relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
-
-
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
+
+            Route::resource('admin/candidate', CandidateController::class);
+
         });
         Route::resource('relawan', RelawanController::class)->middleware('checkRole:1');
     });

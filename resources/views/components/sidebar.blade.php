@@ -31,6 +31,12 @@
                         <span class="ms-3 flex-1 whitespace-nowrap">Pendukung</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('dashboard.candidate.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                        <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
+                        <span class="ms-3 flex-1 whitespace-nowrap">Candidate</span>
+                    </a>
+                </li>
             </ul>
             <a href="{{ route('auth.logout') }}" class="rounded-lg text-center mt-16 bg-red-600 px-5 py-2.5 text-white transition-colors duration-200 hover:bg-red-700 focus:outline-none">Logout</a>
         </div>

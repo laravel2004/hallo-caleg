@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TPS extends Model
+class Quickcount extends Model
 {
     use HasFactory;
 
-    public function quickcount() {
-        return $this->hasMany(QuickCount::class, 'tps_id', 'id');
+    public function candidate() {
+        return $this->belongsTo(Candidate::class, 'candidate_id', 'id');
     }
 }
