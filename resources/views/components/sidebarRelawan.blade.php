@@ -11,19 +11,22 @@
           {{-- <img src="https://flowbite.com/application-ui/demo/images/logo.svg" alt=""> --}}
           <h2 class="text-xl font-bold">Halo Caleg</h2>
       </div>
-      <ul class="space-y-2 font-medium">
-          <li>
-              <a href="{{ route('dashboard.admin.dashboard') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-                  <i class='bx bx-pie-chart-alt-2 text-3xl text-[#6b7280]'></i>
-                  <span class="ms-3">Dashboard</span>
-              </a>
-          </li>
-          <li>
-              <a href="{{ route('dashboard.relawan.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-                  <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
-                  <span class="ms-3 flex-1 whitespace-nowrap">Pendukung</span>
-              </a>
-          </li>
-      </ul>
+      <div class="flex flex-col justify-between">
+          <ul class="space-y-2 font-medium">
+              <li>
+                  <a href="{{ route('dashboard.admin.dashboard') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                      <i class='bx bx-pie-chart-alt-2 text-3xl text-[#6b7280]'></i>
+                      <span class="ms-3">Dashboard</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="{{ route('dashboard.relawan.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                      <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
+                      <span class="ms-3 flex-1 whitespace-nowrap">Pendukung</span>
+                  </a>
+              </li>
+          </ul>
+          <a href="{{ route('auth.logout') }}" class="rounded-lg text-center mt-16 bg-red-600 px-5 py-2.5 text-white transition-colors duration-200 hover:bg-red-700 focus:outline-none">Logout</a>
+      </div>
   </div>
 </aside>
