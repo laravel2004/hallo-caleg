@@ -13,6 +13,11 @@
                     <span class="font-medium">{{ session('success') }}!</span> Silakan masuk dengan akun yang telah Anda daftarkan.
                 </div>
             @endif
+            @if (session('error'))
+                <div class="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800" role="alert">
+                    <span class="font-medium">{{ session('error') }}!</span>
+                </div>
+            @endif
             <form class="mt-8 space-y-6" action="{{ route('auth.loginPost') }}" method="POST">
                 @csrf
                 <div>

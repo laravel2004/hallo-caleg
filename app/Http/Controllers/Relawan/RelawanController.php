@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Relawan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pendukung;
+use App\Service\IndonesiaAreaService;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -25,35 +26,8 @@ class RelawanController extends Controller
     {
         try {
             $user = auth()->user();
-            if($request->ajax()) {
-                $data = $this->pendukung->where('user_id', $user->id)->get();
-                return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('name', function($row){
-                    return $row->name;
-                })
-                ->addColumn('nik', function($row){
-                    return $row->nik;
-                })
-                ->addColumn('kec', function($row){
-                    return $row->kec;
-                })
-                ->addColumn('desa', function($row){
-                    return $row->desa;
-                })
-                ->addColumn('detail_alamat', function($row){
-                    return $row->detail_alamat;
-                })
-                ->addColumn('tps', function($row){
-                    return $row->tps->name;
-                })
-                ->addColumn('action', function($row){
-                    $actionBtn = '<a href="' . route('relawan.address.edit', $row->id) . '" class="btn btn-success edit"><i class="bi bi-pencil-square"></i></a>
-                    <button onclick="handleDelete(' . $row->id . ')" class="btn btn-danger delete"><i class="bi bi-trash"></i></button>';
-                        return $actionBtn;
-                })->toJson();
-            }
-            return view('pages.relawan.index');
+            $pendukung = $this->pendukung->where('user_id', $user->id)->get();
+            return view('pages.relawan.pendukung.index', compact('pendukung'));
         }
         catch(Exception $e){
             return response()->json([
@@ -69,7 +43,7 @@ class RelawanController extends Controller
      */
     public function create()
     {
-        return view('pages.relawan.create');
+        return view('pages.relawan.pendukung.create');
     }
 
     /**
@@ -88,7 +62,10 @@ class RelawanController extends Controller
                 'user_id' => 'required',
                 'tps_id' => 'required',
             ]);
+            $validateRequest['kec'] = IndonesiaAreaService::getArea('district' ,$validateRequest['kec']);
+            $validateRequest['desa'] = IndonesiaAreaService::getArea('village' ,$validateRequest['desa']);
 
+            
             $pendukung = $this->pendukung->create($validateRequest);
             return response()->json([
                 'status' => 'success',
@@ -118,7 +95,7 @@ class RelawanController extends Controller
     public function edit(string $id)
     {
         $pendukung = $this->pendukung->find($id);
-        return view('pages.relawan.edit', compact('pendukung'));
+        return view('pages.relawan.pendukung.edit', compact('pendukung'));
     }
 
     /**

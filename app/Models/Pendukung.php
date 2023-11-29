@@ -9,6 +9,16 @@ class Pendukung extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'nik',
+        'kec',
+        'desa',
+        'detail_alamat',
+        'tps_id',
+        'user_id',
+    ];
+
     public function tps() {
         return $this->belongsTo(Tps::class, 'tps_id', 'id');
     }

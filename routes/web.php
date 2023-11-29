@@ -59,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/admin/edit-relawan/{id}', [AdminController::class, 'edit'])->name('admin.edit');
             Route::put('/admin/edit-relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
             // hapus relawan
-            Route::post('/admin/hapus-relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+            Route::delete('/admin/hapus-relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 
 
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');

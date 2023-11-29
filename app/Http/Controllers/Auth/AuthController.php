@@ -8,6 +8,7 @@ use App\Service\IndonesiaAreaService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller {
 
@@ -34,8 +35,10 @@ class AuthController extends Controller {
                 if (Auth::user()->role == 0) {
                     return redirect('/dashboard/admin');
                 }
-                return redirect('/dashboard/relawan');
+
+                return redirect('/dashboard/relawan/');
             }
+            return back()->with('error', 'email or password is wrong!');
         } catch (Exception $e) {
             return back()->with('error', 'Login gagal!');
         }
