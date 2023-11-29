@@ -22,7 +22,7 @@
         </div>
         <div>
             <label for="image" class="mb-2 block text-sm font-medium text-gray-900">Email</label>
-            <input type="file" name="image" id="email" placeholder="Pilih gambar" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" required>
+            <input type="file" name="image" id="email" placeholder="Pilih gambar" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
         </div>
         
         <input value="1" name="role" class="hidden" />

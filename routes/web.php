@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         // Route::resource('admin', AdminController::class)->middleware('checkRole:0');
         Route::middleware(['checkRole:0'])->group(function () {
+            Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
             // relawan
             Route::get('/admin/relawan', [AdminController::class, 'index'])->name('admin.index');
             // search relawan

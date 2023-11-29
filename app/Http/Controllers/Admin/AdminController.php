@@ -68,7 +68,7 @@ class AdminController extends Controller {
                             ' . $row->pendukungs->count() . '
                         </td>
                         <td class="flex items-center gap-x-4 px-6 py-4">
-                            <a href="/dashboard/admin/edit/' . $row->id . '" class="font-medium text-blue-600 hover:underline">Edit</a>
+                            <a href="/dashboard/admin/edit-relawan/' . $row->id . '" class="font-medium text-blue-600 hover:underline">Edit</a>
                             <a href="#" onclick="handleDelete(' . $row->id . ')" class="font-medium text-red-600 hover:underline">Delete</a>
                         </td>
                     </tr>
@@ -91,6 +91,10 @@ class AdminController extends Controller {
 
             return response()->json($data);
         }
+    }
+
+    public function dashboard() {
+        return view('pages.admin.index');
     }
 
     /**
@@ -212,7 +216,6 @@ class AdminController extends Controller {
             return response()->json([
                 'status' => 'success',
                 'message' => 'User updated successfully',
-                'user' => $user,
             ]);
         } catch (Exception $e) {
             return response()->json([
