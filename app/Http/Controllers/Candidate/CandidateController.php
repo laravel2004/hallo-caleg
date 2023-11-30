@@ -115,10 +115,12 @@ class CandidateController extends Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             ]);
 
+            $candidate = $this->candidate->find($id);
+
             if($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imagePath = $image->storeAs('public/candidate', $image->hashName());
-                $this->candidate->update([
+                $response = $candidate->update([
                     'name' => $request->name,
                     'partai' => $request->partai,
                     'nomor_urut' => $request->nomor_urut,
@@ -128,7 +130,7 @@ class CandidateController extends Controller
                 ]);
             }
             else {
-                $this->candidate->update([
+                $response = $candidate->update([
                     'name' => $request->name,
                     'partai' => $request->partai,
                     'nomor_urut' => $request->nomor_urut,
@@ -137,8 +139,10 @@ class CandidateController extends Controller
                     'image' => null,
                 ]);
             }
+            if($response) {
+                return redirect('dashboard/admin/candidate')->with('success', 'Data Berhasil Diubah');
+            }
 
-            return redirect('dashboard/candidate')->with('success', 'Data Berhasil Diubah');
         }
         catch(Exception $e) {
             return back()->with('error', $e->getMessage());
