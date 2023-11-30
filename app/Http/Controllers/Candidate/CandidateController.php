@@ -66,13 +66,13 @@ class CandidateController extends Controller {
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex gap-x-4">
-                                <a href="/dashboard/admin/candidate/' . $row->id . '" class="flex justify-center rounded bg-primary p-2">
+                                <a href="/dashboard/admin/candidate/' . $row->id . '" class="flex justify-center items-center rounded bg-primary p-2">
                                     <i class="bx bxs-info-circle text-xl leading-none text-white"></i>
                                 </a>
-                                <a href="/dashboard/admin/edit-candidate/' . $row->id . '" class="lex justify-center rounded bg-yellow-600 p-2">
+                                <a href="/dashboard/admin/edit-candidate/' . $row->id . '" class="flex justify-center items-center rounded bg-yellow-600 p-2">
                                     <i class="bx bxs-pencil text-xl leading-none text-white"></i>
                                 </a>
-                                <a href="#" onclick="handleDelete(' . $row->id . ')" class="flex justify-center rounded bg-red-600 p-2">
+                                <a href="#" onclick="handleDelete(' . $row->id . ')" class="flex justify-center items-center rounded bg-red-600 p-2">
                                     <i class="bx bxs-trash text-xl leading-none text-white"></i>
                                 </a>
                             </div>
