@@ -43,7 +43,7 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    swal({
+                    Swal.fire({
                         title: "Success",
                         text: response.message,
                         icon: "success",
@@ -53,7 +53,7 @@
                     })
                 },
                 error: function(error) {
-                    swal({
+                    Swal.fire({
                         title: "Error",
                         text: error.responseJSON.message,
                         icon: "error",
