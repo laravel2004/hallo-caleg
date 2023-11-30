@@ -46,7 +46,6 @@ Route::prefix('utility')
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        // Route::resource('admin', AdminController::class)->middleware('checkRole:0');
         Route::middleware(['checkRole:0'])->group(function () {
             Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
             // relawan
@@ -61,10 +60,24 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/admin/edit-relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
             // hapus relawan
             Route::delete('/admin/hapus-relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+
+            // pendukung
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
 
-            Route::resource('admin/candidate', CandidateController::class);
-
+            // kandidat
+            Route::get('admin/candidate', [CandidateController::class, 'index'])->name('candidate.index');
+            // kandidat detail
+            Route::get('/admin/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.show');
+            // search kandidat
+            Route::get('/search-candidate', [CandidateController::class, 'search'])->name('candidate.search');
+            // tambah relawan
+            Route::get('/admin/tambah-candidate', [CandidateController::class, 'create'])->name('candidate.create');
+            Route::post('/admin/tambah-candidate', [CandidateController::class, 'store'])->name('candidate.store');
+            // edit relawan
+            Route::get('/admin/edit-candidate/{id}', [CandidateController::class, 'edit'])->name('candidate.edit');
+            Route::put('/admin/edit-candidate/{id}', [CandidateController::class, 'update'])->name('candidate.update');
+            // hapus relawan
+            Route::delete('/admin/hapus-candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
         });
         Route::resource('relawan', RelawanController::class)->middleware('checkRole:1');
     });

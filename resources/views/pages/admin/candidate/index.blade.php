@@ -2,104 +2,133 @@
 
 @section('title', 'Dashboard Admin | Dashboard')
 
+@if (session('success'))
+    @push('script')
+        <script>
+            Swal.fire({
+                title: "Sukses!",
+                text: "{{ session('success') }}",
+                icon: "success"
+            });
+        </script>
+    @endpush
+@endif
+@if (session('error'))
+    @push('script')
+        <script>
+            Swal.fire({
+                title: "Terjadi Kesalahan!",
+                text: "{{ session('error') }}",
+                icon: "error"
+            });
+        </script>
+    @endpush
+@endif
+
 @section('content')
     <x-sidebar />
     <div class="p-6 sm:ml-64">
-        @if (session('success'))
-                <div class="mb-4 rounded-lg bg-green-50 p-4 text-sm text-green-800" role="alert">
-                    <span class="font-medium">{{ session('success') }}!</span>
+        <div class="mb-6 flex items-center justify-between">
+            <h1 class="text-3xl font-semibold">Daftar Kandidat</h1>
+            <a href="{{ route('dashboard.candidate.create') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Tambah Candidate</a>
+        </div>
+        <div class="mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-x-4">
+                <p class="flex-grow text-sm">Show per page(s):</p>
+                <select id="showPerPages" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div class="relative flex-shrink">
+                <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                    <i class='bx bx-search text-xl text-gray-500'></i>
                 </div>
-            @endif
-            @if (session('error'))
-                <div class="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800" role="alert">
-                    <span class="font-medium">{{ session('error') }}!</span>
-                </div>
-            @endif
-      <div class="mb-8 flex items-center justify-between">
-        <h1 class="text-3xl font-semibold">List Candidate</h1>
-        <a href="{{ route('dashboard.candidate.create') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none"  >Tambah Candidate</a >
-      </div>
-      <div class="relative overflow-x-auto sm:rounded-lg">
-        <table id="relawan" class="w-full text-left text-sm text-gray-500 rtl:text-right">
-            <thead class="bg-gray-50 text-xs uppercase text-gray-700">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        No urut
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Pass Foto
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Lengkap Candidate
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        jenis Kelamin 
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Partai
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Tempat Tinggal
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Aksi
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($candidates as $candidate)
-                    <tr class="border-b odd:bg-white even:bg-gray-50">
-                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                            {{ $candidate->nomor_urut }}
-                        </th>
-                        <td class="px-6 py-4">
-                            <img src="{{ asset('storage/candidate' . $candidate->photo) }}" alt="{{ $candidate->name }}" class="w-20 object-cover">
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $candidate->name }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $candidate->jenis_kelamin }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $candidate->partai }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $candidate->tempat_tinggal }}
-                        </td>
-                        <td class="px-6 py-4 flex gap-4">
-                          <a  href="{{ route('dashboard.candidate.edit', $candidate->id) }}" class="font-medium text-blue-600 hover:underline">Edit</a>
-                          <a  href="{{ route('dashboard.candidate.show', $candidate->id) }}" class="font-medium text-green-600 hover:underline">Detail</a>
-                          <button onclick="{handleDelete('{{ $candidate->id }}')}" class="font-medium text-red-600 hover:underline">Hapus</button>
-                        </td>
-                    </tr>
-                @empty
+                <input type="search" id="search" name="search" class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari data disini...">
+            </div>
+        </div>
+        <div class="relative overflow-x-auto sm:rounded-lg">
+            <table id="relawan" class="w-full text-left text-sm text-gray-500 rtl:text-right">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700">
                     <tr>
-                        <td colspan="7" class="py-8 text-center text-gray-500">
-                            Tidak ada data yang dapat ditampilkan.
-                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            No urut
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Pas Foto
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nama Lengkap
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            jenis Kelamin
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Partai
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tempat Tinggal
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Aksi
+                        </th>
                     </tr>
-                @endforelse
-            </tbody>
-        </table>
-      </div>
-      <div class="mt-4">
-          {{-- {{ $pendukung->links('pagination::tailwind') }} --}}
-      </div>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="pagination" class="mt-4"></div>
     </div>
 @endsection
 
 @push('script')
     <script>
+        fetchData();
+
+        function fetchData(query = '', page = 1, perPage = 10) {
+            $.ajax({
+                url: "{{ route('dashboard.candidate.search') }}",
+                method: "GET",
+                data: {
+                    query: query,
+                    page: page,
+                    perPage: perPage
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('tbody').html(data.table_data);
+                    $('#pagination').html(data.pagination);
+                }
+            })
+        }
+
+        $(document).on('keyup', '#search', function() {
+            var query = $(this).val();
+            fetchData(query);
+        });
+
+        $(document).on('click', '#pagination a', function(event) {
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            fetchData($('#search').val(), page);
+        });
+
+        $(document).on('change', '#showPerPages', function() {
+            var perPage = $(this).val();
+            fetchData($('#search').val(), 1, perPage);
+        });
+
         function handleDelete(id) {
-            swal({
-                title: 'Apakah anda?',
-                text: "You won't be able to revert this!",
+            Swal.fire({
+                title: 'Yakin ingin menghapus data?',
+                text: "Data yang telah dihapus tidak dapat dikembalikan!",
                 icon: 'warning',
+                showCancelButton: true,
                 buttons: true,
                 dangerMode: true,
-            }).then((willDelete) => {
-                if (willDelete) {
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
                         type: 'DELETE',
                         url: "{{ route('dashboard.candidate.destroy', ':id') }}".replace(':id', id),
@@ -110,8 +139,8 @@
                             id: id,
                         },
                         success: function(response) {
-                            swal(
-                                'Deleted!',
+                            Swal.fire(
+                                'Data berhasil dihapus!',
                                 response.message,
                             ).then(() => {
                                 window.location.reload()

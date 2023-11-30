@@ -93,7 +93,7 @@
                 title: "Are you sure?",
                 text: "Once deleted, you will not be able to recover this imaginary file!",
                 icon: "warning",
-                buttons: true,
+                showCancelButton: false,
                 dangerMode: true,
             }).then((willDelete) => {
                 if (willDelete) {
@@ -107,17 +107,16 @@
                             id: id
                         },
                         success: function(response) {
-                            swal({
+                            Swal.fire({
                                 title: "Success",
                                 text: response.message,
                                 icon: "success",
                                 delay: 1000,
                                 button: false,
                             })
-                            window.location.reload()
                         },
                         error: function(response) {
-                            swal({
+                            Swal.fire({
                                 title: "Error",
                                 text: response.message,
                                 icon: "error",
