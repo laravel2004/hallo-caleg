@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller {
 
@@ -38,7 +39,14 @@ class AuthController extends Controller {
 
                 return redirect('/dashboard/relawan/');
             }
-            return back()->with('error', 'email or password is wrong!');
+
+            $userExists = User::where('email', $validateRequest['email'])->exists();
+
+            if (!$userExists) {
+                return back()->with('error', 'Akun tidak ditemukan. Buat akun terlebih dahulu!');
+            }
+
+            return back()->with('error', 'Email atau password salah!');
         } catch (Exception $e) {
             return back()->with('error', 'Login gagal!');
         }
@@ -50,22 +58,26 @@ class AuthController extends Controller {
 
     public function registerPost(Request $request) {
         try {
-            $validateRequest = $request->validate([
+            $validateRequest = Validator::make($request->all(), [
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
-                'password' => 'required',
+                'password' => 'required|min:8',
                 'confirm_password' => 'required|same:password',
                 'role' => 'required'
             ]);
 
-            $this->user->insert([
-                'name' => $validateRequest['name'],
-                'email' => $validateRequest['email'],
-                'password' => bcrypt($validateRequest['password']),
-                'role' => $validateRequest['role'],
+            if ($validateRequest->fails()) {
+                return back()->withErrors($validateRequest)->withInput();
+            }
+
+            $this->user->create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
             ]);
 
-            return redirect('/auth/login')->with('success', 'Pendaftaran akun berhasil!');
+            return redirect('/auth/login')->with('success', 'Pendaftaran akun berhasil! Silakan masuk.');
         } catch (Exception $e) {
             return back()->with('error', 'Pendaftaran akun gagal!');
         }
