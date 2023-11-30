@@ -15,29 +15,33 @@
             <div class="flex flex-col justify-between">
                 <ul class="space-y-2 font-medium">
                     <li>
-                        <a href="{{ route('dashboard.admin.dashboard') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin.dashboard') }} @else # @endif " class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
                             <i class='bx bx-pie-chart-alt-2 text-3xl text-[#6b7280]'></i>
                             <span class="ms-3">Dashboard</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('dashboard.admin.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-                            <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
-                            <span class="ms-3 flex-1 whitespace-nowrap">Relawan</span>
-                        </a>
-                    </li>
+                    @if (Auth::user()->role == 0)
+                        <li>
+                            <a href="{{ route('dashboard.admin.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                                <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
+                                <span class="ms-3 flex-1 whitespace-nowrap">Relawan</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <a href="{{ route('dashboard.admin.pendukung') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
                             <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
                             <span class="ms-3 flex-1 whitespace-nowrap">Pendukung</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('dashboard.candidate.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-                            <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
-                            <span class="ms-3 flex-1 whitespace-nowrap">Kandidat</span>
-                        </a>
-                    </li>
+                    @if (Auth::user()->role == 0)
+                        <li>
+                            <a href="{{ route('dashboard.candidate.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                                <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
+                                <span class="ms-3 flex-1 whitespace-nowrap">Kandidat</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
