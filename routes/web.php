@@ -51,45 +51,45 @@ Route::middleware(['auth'])->group(function () {
             // relawan
             Route::get('/admin/relawan', [AdminController::class, 'index'])->name('admin.index');
             // search relawan
-            Route::get('/search-relawan', [AdminController::class, 'searchRelawan'])->name('admin.search.relawan');
+            Route::get('/admin/relawan/search', [AdminController::class, 'searchRelawan'])->name('admin.search.relawan');
             // tambah relawan
-            Route::get('/admin/tambah-relawan', [AdminController::class, 'create'])->name('admin.create');
-            Route::post('/admin/tambah-relawan', [AdminController::class, 'store'])->name('admin.store');
+            Route::get('/admin/relawan/create', [AdminController::class, 'create'])->name('admin.create');
+            Route::post('/admin/relawan', [AdminController::class, 'store'])->name('admin.store');
             // edit relawan
-            Route::get('/admin/edit-relawan/{id}', [AdminController::class, 'edit'])->name('admin.edit');
-            Route::put('/admin/edit-relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
+            Route::get('/admin/relawan/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
+            Route::put('/admin/relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
             // hapus relawan
-            Route::delete('/admin/hapus-relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+            Route::delete('/admin/relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 
             // pendukung
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
-            Route::get('/admin/search-pendukung', [AdminController::class, 'searchPendukung'])->name('admin.search.pendukung');
+            Route::get('/admin/pendukung/search', [AdminController::class, 'searchPendukung'])->name('admin.search.pendukung');
 
             // kandidat
             Route::get('admin/candidate', [CandidateController::class, 'index'])->name('candidate.index');
             // kandidat detail
             Route::get('/admin/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.show');
             // search kandidat
-            Route::get('/search-candidate', [CandidateController::class, 'search'])->name('candidate.search');
+            Route::get('/admin/candidate/search', [CandidateController::class, 'search'])->name('candidate.search');
             // tambah relawan
-            Route::get('/admin/tambah-candidate', [CandidateController::class, 'create'])->name('candidate.create');
-            Route::post('/admin/tambah-candidate', [CandidateController::class, 'store'])->name('candidate.store');
+            Route::get('/admin/candidate/create', [CandidateController::class, 'create'])->name('candidate.create');
+            Route::post('/admin/candidate', [CandidateController::class, 'store'])->name('candidate.store');
             // edit relawan
-            Route::get('/admin/edit-candidate/{id}', [CandidateController::class, 'edit'])->name('candidate.edit');
-            Route::put('/admin/edit-candidate/{id}', [CandidateController::class, 'update'])->name('candidate.update');
+            Route::get('/admin/candidate/edit/{id}', [CandidateController::class, 'edit'])->name('candidate.edit');
+            Route::put('/admin/candidate/{id}', [CandidateController::class, 'update'])->name('candidate.update');
             // hapus relawan
-            Route::delete('/admin/hapus-candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
+            Route::delete('/admin/candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
         });
 
         Route::middleware(['checkRole:1'])->group(function () {
             Route::get('/relawan', [RelawanController::class, 'dashboard'])->name('relawan');
             Route::get('/relawan/pendukung', [RelawanController::class, 'index'])->name('relawan.pendukung');
-            Route::get('/relawan/search-pendukung', [RelawanController::class, 'search'])->name('relawan.pendukung.search');
-            Route::get('/relawan/tambah-pendukung', [RelawanController::class, 'create'])->name('relawan.pendukung.create');
-            Route::post('/relawan/tambah-pendukung', [RelawanController::class, 'store'])->name('relawan.pendukung.store');
-            Route::get('/relawan/edit-pendukung/{id}', [RelawanController::class, 'edit'])->name('relawan.pendukung.edit');
-            Route::put('/relawan/edit-pendukung/{id}', [RelawanController::class, 'update'])->name('relawan.pendukung.update');
-            Route::delete('/relawan/hapus-pendukung/{id}', [RelawanController::class, 'destroy'])->name('relawan.pendukung.destroy');
+            Route::get('/relawan/pendukung/search', [RelawanController::class, 'search'])->name('relawan.pendukung.search');
+            Route::get('/relawan/pendukung/create', [RelawanController::class, 'create'])->name('relawan.pendukung.create');
+            Route::post('/relawan/pendukung', [RelawanController::class, 'store'])->name('relawan.pendukung.store');
+            Route::get('/relawan/pendukung/edit/{id}', [RelawanController::class, 'edit'])->name('relawan.pendukung.edit');
+            Route::put('/relawan/pendukung/{id}', [RelawanController::class, 'update'])->name('relawan.pendukung.update');
+            Route::delete('/relawan/pendukung/{id}', [RelawanController::class, 'destroy'])->name('relawan.pendukung.destroy');
         });
     });
 });

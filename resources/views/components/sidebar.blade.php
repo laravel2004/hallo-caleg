@@ -9,36 +9,35 @@
     <div class="flex h-full flex-col justify-between overflow-y-auto border-r border-neutral-200 bg-gray-50 px-3 py-4">
         <div>
             <div class="mb-4 flex items-center gap-x-4 px-2">
-                {{-- <img src="https://flowbite.com/application-ui/demo/images/logo.svg" alt=""> --}}
                 <h2 class="text-xl font-bold">Halo Caleg</h2>
             </div>
             <div class="flex flex-col justify-between">
                 <ul class="space-y-2 font-medium">
                     <li>
-                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin') }} @else {{ route('dashboard.relawan') }} @endif " class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin') }} @else {{ route('dashboard.relawan') }} @endif " class="{{ request()->is('dashboard/admin') || request()->is('dashboard/relawan') ? 'bg-gray-200' : 'hover:bg-gray-200' }} group flex items-center rounded-lg p-2 transition-colors duration-200">
                             <i class='bx bx-pie-chart-alt-2 text-3xl text-[#6b7280]'></i>
-                            <span class="ms-3">Dashboard</span>
+                            <span class="ms-3 text-gray-900">Dashboard</span>
                         </a>
                     </li>
                     @if (Auth::user()->role == 0)
                         <li>
-                            <a href="{{ route('dashboard.admin.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                            <a href="{{ route('dashboard.admin.index') }}" class="{{ request()->is('dashboard/admin/relawan*') ? 'bg-gray-200' : 'hover:bg-gray-200' }} group flex items-center rounded-lg p-2 transition-colors duration-200">
                                 <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
-                                <span class="ms-3 flex-1 whitespace-nowrap">Relawan</span>
+                                <span class="ms-3 text-gray-900">Relawan</span>
                             </a>
                         </li>
                     @endif
                     <li>
-                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin.pendukung') }} @else {{ route('dashboard.relawan.pendukung') }} @endif" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin.pendukung') }} @else {{ route('dashboard.relawan.pendukung') }} @endif" class="{{ request()->is('dashboard/admin/pendukung*') || request()->is('dashboard/relawan/pendukung*') ? 'bg-gray-200' : 'hover:bg-gray-200' }} group flex items-center rounded-lg p-2 transition-colors duration-200">
                             <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
-                            <span class="ms-3 flex-1 whitespace-nowrap">Pendukung</span>
+                            <span class="ms-3">Pendukung</span>
                         </a>
                     </li>
                     @if (Auth::user()->role == 0)
                         <li>
-                            <a href="{{ route('dashboard.candidate.index') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                            <a href="{{ route('dashboard.candidate.index') }}" class="{{ request()->is('dashboard/admin/candidate*') ? 'bg-gray-200' : 'hover:bg-gray-200' }} group flex items-center rounded-lg p-2 transition-colors duration-200">
                                 <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
-                                <span class="ms-3 flex-1 whitespace-nowrap">Kandidat</span>
+                                <span class="ms-3 text-gray-900">Kandidat</span>
                             </a>
                         </li>
                     @endif

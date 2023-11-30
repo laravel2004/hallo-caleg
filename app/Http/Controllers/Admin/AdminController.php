@@ -68,7 +68,7 @@ class AdminController extends Controller {
                             ' . $row->pendukungs->count() . '
                         </td>
                         <td class="flex items-center gap-x-2 px-6 py-4">
-                            <a href="/dashboard/admin/edit-relawan/' . $row->id . '" class="flex justify-center items-center rounded bg-yellow-600 p-2">
+                            <a href="/dashboard/admin/relawan/edit/' . $row->id . '" class="flex justify-center items-center rounded bg-yellow-600 p-2">
                                 <i class="bx bxs-pencil text-xl leading-none text-white"></i>
                             </a>
                             <a href="#" onclick="handleDelete(' . $row->id . ')" class="flex justify-center items-center rounded bg-red-600 p-2">
