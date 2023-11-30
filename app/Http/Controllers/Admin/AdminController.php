@@ -25,7 +25,7 @@ class AdminController extends Controller {
         $this->pendukung = $pendukung;
     }
 
-    public function index(Request $request) {
+    public function index() {
         try {
             return view('pages.admin.relawan.index');
         } catch (Exception $e) {
@@ -67,9 +67,13 @@ class AdminController extends Controller {
                         <td class="px-6 py-4">
                             ' . $row->pendukungs->count() . '
                         </td>
-                        <td class="flex items-center gap-x-4 px-6 py-4">
-                            <a href="/dashboard/admin/edit-relawan/' . $row->id . '" class="font-medium text-blue-600 hover:underline">Edit</a>
-                            <a href="#" onclick="handleDelete(' . $row->id . ')" class="font-medium text-red-600 hover:underline">Delete</a>
+                        <td class="flex items-center gap-x-2 px-6 py-4">
+                            <a href="/dashboard/admin/edit-relawan/' . $row->id . '" class="flex justify-center items-center rounded bg-yellow-600 p-2">
+                                <i class="bx bxs-pencil text-xl leading-none text-white"></i>
+                            </a>
+                            <a href="#" onclick="handleDelete(' . $row->id . ')" class="flex justify-center items-center rounded bg-red-600 p-2">
+                                <i class="bx bxs-trash text-xl leading-none text-white"></i>
+                            </a>
                         </td>
                     </tr>
                     ';
@@ -253,8 +257,73 @@ class AdminController extends Controller {
     }
 
     public function indexPendukung() {
-        $pendukung = Pendukung::paginate(10);
+        return view('pages.admin.pendukung');
+    }
 
-        return view('pages.admin.pendukung', compact('pendukung'));
+    public function searchPendukung(Request $request) {
+        if ($request->ajax()) {
+            $output = '';
+            $perPage = $request->get('perPage', 10);
+            $query = $request->get('query');
+
+            if ($query != '') {
+                $data = $this->pendukung->where(function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('name', 'like', '%' . $query . '%')
+                        ->orWhere('nik', 'like', '%' . $query . '%')
+                        ->orWhere('detail_alamat', 'like', '%' . $query . '%')
+                        ->orWhere('desa', 'like', '%' . $query . '%')
+                        ->orWhere('kec', 'like', '%' . $query . '%');
+                })
+                    ->paginate($perPage);
+            } else {
+                $data = $this->pendukung->paginate($perPage);
+            }
+
+            $totalRow = $data->count();
+            if ($totalRow > 0) {
+                foreach ($data as $row) {
+                    $output .= '
+                    <tr class="border-b odd:bg-white even:bg-gray-50">
+                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                            ' . $row->name . '
+                        </th>
+                        <td class="px-6 py-4">
+                            ' . $row->nik . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->detail_alamat . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->desa . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->kec . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->tps->name . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->user->name . '
+                        </td>
+                    </tr>
+                    ';
+                }
+            } else {
+                $output .= '
+                <tr>
+                    <td colspan="7" class="py-8 text-center text-gray-500">
+                        Tidak ada data yang dapat ditampilkan.
+                    </td>
+                </tr>
+                ';
+            }
+
+            $data = array(
+                'table_data' => $output,
+                'pagination' => $data->links('pagination::tailwind')->toHtml(),
+            );
+
+            return response()->json($data);
+        }
     }
 }

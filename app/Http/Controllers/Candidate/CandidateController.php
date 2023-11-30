@@ -65,7 +65,7 @@ class CandidateController extends Controller {
                             ' . $row->tempat_tinggal . '
                         </td>
                         <td class="px-6 py-4">
-                            <div class="flex gap-x-4">
+                            <div class="flex gap-x-2">
                                 <a href="/dashboard/admin/candidate/' . $row->id . '" class="flex justify-center items-center rounded bg-primary p-2">
                                     <i class="bx bxs-info-circle text-xl leading-none text-white"></i>
                                 </a>
@@ -114,7 +114,7 @@ class CandidateController extends Controller {
             $request->validate([
                 'name' => 'required',
                 'partai' => 'required',
-                'nomor_urut' => 'required',
+                'nomor_urut' => 'required|numeric',
                 'jenis_kelamin' => 'required',
                 'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
                 'tempat_tinggal' => 'required',
@@ -168,7 +168,7 @@ class CandidateController extends Controller {
             $request->validate([
                 'name' => 'required',
                 'partai' => 'required',
-                'nomor_urut' => 'required',
+                'nomor_urut' => 'required|numeric',
                 'jenis_kelamin' => 'required',
                 'tempat_tinggal' => 'required',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',

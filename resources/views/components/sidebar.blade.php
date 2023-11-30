@@ -6,7 +6,7 @@
 </button>
 
 <aside id="default-sidebar" class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0" aria-label="Sidebar">
-    <div class="flex h-full flex-col justify-between overflow-y-auto bg-gray-50 px-3 py-4">
+    <div class="flex h-full flex-col justify-between overflow-y-auto border-r border-neutral-200 bg-gray-50 px-3 py-4">
         <div>
             <div class="mb-4 flex items-center gap-x-4 px-2">
                 {{-- <img src="https://flowbite.com/application-ui/demo/images/logo.svg" alt=""> --}}
@@ -15,7 +15,7 @@
             <div class="flex flex-col justify-between">
                 <ul class="space-y-2 font-medium">
                     <li>
-                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin.dashboard') }} @else # @endif " class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin') }} @else {{ route('dashboard.relawan') }} @endif " class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
                             <i class='bx bx-pie-chart-alt-2 text-3xl text-[#6b7280]'></i>
                             <span class="ms-3">Dashboard</span>
                         </a>
@@ -29,7 +29,7 @@
                         </li>
                     @endif
                     <li>
-                        <a href="{{ route('dashboard.admin.pendukung') }}" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+                        <a href="@if (Auth::user()->role == 0) {{ route('dashboard.admin.pendukung') }} @else {{ route('dashboard.relawan.pendukung') }} @endif" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
                             <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
                             <span class="ms-3 flex-1 whitespace-nowrap">Pendukung</span>
                         </a>

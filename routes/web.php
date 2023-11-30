@@ -47,7 +47,7 @@ Route::prefix('utility')
 Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::middleware(['checkRole:0'])->group(function () {
-            Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+            Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin');
             // relawan
             Route::get('/admin/relawan', [AdminController::class, 'index'])->name('admin.index');
             // search relawan
@@ -63,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
 
             // pendukung
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
+            Route::get('/admin/search-pendukung', [AdminController::class, 'searchPendukung'])->name('admin.search.pendukung');
 
             // kandidat
             Route::get('admin/candidate', [CandidateController::class, 'index'])->name('candidate.index');
@@ -79,6 +80,16 @@ Route::middleware(['auth'])->group(function () {
             // hapus relawan
             Route::delete('/admin/hapus-candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
         });
-        Route::resource('relawan', RelawanController::class)->middleware('checkRole:1');
+
+        Route::middleware(['checkRole:1'])->group(function () {
+            Route::get('/relawan', [RelawanController::class, 'dashboard'])->name('relawan');
+            Route::get('/relawan/pendukung', [RelawanController::class, 'index'])->name('relawan.pendukung');
+            Route::get('/relawan/search-pendukung', [RelawanController::class, 'search'])->name('relawan.pendukung.search');
+            Route::get('/relawan/tambah-pendukung', [RelawanController::class, 'create'])->name('relawan.pendukung.create');
+            Route::post('/relawan/tambah-pendukung', [RelawanController::class, 'store'])->name('relawan.pendukung.store');
+            Route::get('/relawan/edit-pendukung/{id}', [RelawanController::class, 'edit'])->name('relawan.pendukung.edit');
+            Route::put('/relawan/edit-pendukung/{id}', [RelawanController::class, 'update'])->name('relawan.pendukung.update');
+            Route::delete('/relawan/hapus-pendukung/{id}', [RelawanController::class, 'destroy'])->name('relawan.pendukung.destroy');
+        });
     });
 });
