@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Candidate\CandidateController;
+use App\Http\Controllers\Quickcount\QuickcountController;
 use App\Http\Controllers\Relawan\RelawanController;
 use App\Http\Controllers\Util\IndonesiaAreaController;
 use Illuminate\Support\Facades\Route;
@@ -79,6 +80,9 @@ Route::middleware(['auth'])->group(function () {
             // hapus relawan
             Route::delete('/admin/hapus-candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
         });
-        Route::resource('relawan', RelawanController::class)->middleware('checkRole:1');
+        Route::middleware(['checkRole:1'])->group(function () {
+            Route::resource('relawan/quickcount', QuickcountController::class);
+            Route::resource('relawan', RelawanController::class);
+        });
     });
 });

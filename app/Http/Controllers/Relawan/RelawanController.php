@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Relawan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
 use App\Models\Pendukung;
+use App\Models\Quickcount;
 use App\Service\IndonesiaAreaService;
 use Exception;
 use Illuminate\Http\Request;
@@ -86,7 +88,7 @@ class RelawanController extends Controller
     public function show(string $id)
     {
         $pendukung = $this->pendukung->find($id);
-        return view('pages.relawan.show', compact('pendukung'));
+        return view('pages.relawan.pendukung.show', compact('pendukung'));
     }
 
     /**
@@ -161,4 +163,6 @@ class RelawanController extends Controller
             ], 500);
         }
     }
+
+    
 }

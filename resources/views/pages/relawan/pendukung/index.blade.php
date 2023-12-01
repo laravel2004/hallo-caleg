@@ -80,7 +80,7 @@
 @push('script')
     <script>
         function handleDelete(id) {
-            swal({
+            Swal.fire({
                 title: "Are you sure?",
                 text: "Once deleted, you will not be able to recover this",
                 icon: "warning",
@@ -98,7 +98,7 @@
                             id: id
                         },
                         success: function(response) {
-                            swal({
+                            Swal.fire({
                                 title: "Success",
                                 text: response.message,
                                 icon: "success",
@@ -108,7 +108,7 @@
                             window.location.reload()
                         },
                         error: function(response) {
-                            swal({
+                            Swal.fire({
                                 title: "Error",
                                 text: response.message,
                                 icon: "error",
