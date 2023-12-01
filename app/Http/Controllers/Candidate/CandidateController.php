@@ -40,7 +40,6 @@ class CandidateController extends Controller {
             } else {
                 $data = $this->candidate->paginate($perPage);
             }
-
             $totalRow = $data->count();
             if ($totalRow > 0) {
                 foreach ($data as $row) {
@@ -94,7 +93,6 @@ class CandidateController extends Controller {
                 'table_data' => $output,
                 'pagination' => $data->links('pagination::tailwind')->toHtml(),
             );
-
             return response()->json($data);
         }
     }
@@ -134,7 +132,6 @@ class CandidateController extends Controller {
 
             return redirect('dashboard/admin/candidate')->with('success', 'Data Berhasil Ditambahkan');
         } catch (Exception $e) {
-            dd($e);
             return back()->with('error', $e->getMessage());
         }
     }

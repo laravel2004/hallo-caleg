@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Candidate\CandidateController;
+use App\Http\Controllers\Quickcount\QuickcountController;
 use App\Http\Controllers\Relawan\RelawanController;
 use App\Http\Controllers\Util\IndonesiaAreaController;
 use Illuminate\Support\Facades\Route;
@@ -65,14 +66,15 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
             Route::get('/admin/pendukung/search', [AdminController::class, 'searchPendukung'])->name('admin.search.pendukung');
 
-            // kandidat
-            Route::get('admin/candidate', [CandidateController::class, 'index'])->name('candidate.index');
-            // kandidat detail
-            Route::get('/admin/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.show');
             // search kandidat
             Route::get('/admin/candidate/search', [CandidateController::class, 'search'])->name('candidate.search');
             // tambah relawan
             Route::get('/admin/candidate/create', [CandidateController::class, 'create'])->name('candidate.create');
+            // kandidat
+            Route::get('admin/candidate', [CandidateController::class, 'index'])->name('candidate.index');
+            // kandidat detail
+            Route::get('/admin/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.show');
+            // tambah kandidat
             Route::post('/admin/candidate', [CandidateController::class, 'store'])->name('candidate.store');
             // edit relawan
             Route::get('/admin/candidate/edit/{id}', [CandidateController::class, 'edit'])->name('candidate.edit');
@@ -90,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/relawan/pendukung/edit/{id}', [RelawanController::class, 'edit'])->name('relawan.pendukung.edit');
             Route::put('/relawan/pendukung/{id}', [RelawanController::class, 'update'])->name('relawan.pendukung.update');
             Route::delete('/relawan/pendukung/{id}', [RelawanController::class, 'destroy'])->name('relawan.pendukung.destroy');
+            Route::resource('relawan/quickcount', QuickcountController::class);
         });
     });
 });

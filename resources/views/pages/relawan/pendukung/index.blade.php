@@ -97,11 +97,10 @@
         });
 
         function handleDelete(id) {
-            Swal.fire({
-                title: 'Yakin ingin menghapus data?',
-                text: "Data yang telah dihapus tidak dapat dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this",
+                icon: "warning",
                 buttons: true,
                 dangerMode: true,
             }).then((result) => {
