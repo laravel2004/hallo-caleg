@@ -89,14 +89,15 @@
 
         function handleDelete(id) {
             console.log(id)
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this imaginary file!",
-                icon: "warning",
-                showCancelButton: false,
+            Swal.fire({
+                title: 'Yakin ingin menghapus data?',
+                text: "Data yang telah dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                buttons: true,
                 dangerMode: true,
-            }).then((willDelete) => {
-                if (willDelete) {
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
                         type: 'DELETE',
                         url: "{{ route('dashboard.admin.destroy', ':id') }}".replace(':id', id),
@@ -107,12 +108,11 @@
                             id: id
                         },
                         success: function(response) {
-                            Swal.fire({
-                                title: "Success",
-                                text: response.message,
-                                icon: "success",
-                                delay: 1000,
-                                button: false,
+                            Swal.fire(
+                                'Data berhasil dihapus!',
+                                response.message,
+                            ).then(() => {
+                                window.location.reload()
                             })
                         },
                         error: function(response) {

@@ -5,21 +5,39 @@
 @section('content')
     <x-sidebar />
     <div class="p-6 sm:ml-64">
-      <div class="mb-6 flex items-center justify-between">
-        <h1 class="text-3xl font-semibold">Detail Kandidat</h1>
-        <a href="{{ route('dashboard.candidate.index') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Back</a>
-      </div>
-      
-      <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-        <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="{{ asset('storage/candidate/'.$candidate->image) }}" alt="">
-        <div class="flex flex-col justify-between p-4 leading-normal">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Profil Kandidat</h5>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Nama : {{ $candidate->name }}</p>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Partai : {{ $candidate->partai }}</p>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Nomor Urut : {{ $candidate->nomor_urut }}</p>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Jenis Kelamin : {{ $candidate->jenis_kelamin }}</p>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Tempat Tinggal : {{ $candidate->tempat_tinggal }}</p>
+        <div class="mb-6 flex items-center justify-between">
+            <h1 class="text-2xl font-semibold sm:text-3xl">Detail Kandidat</h1>
+            <a href="{{ route('dashboard.candidate.index') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Back</a>
         </div>
-      </div>
+
+        <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <div class="pr-4">
+                <img class="w-full rounded-lg object-cover sm:w-96 md:h-auto" src="{{ asset('storage/candidate/' . $candidate->image) }}" alt="{{ $candidate->name }}">
+            </div>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <label for="nomor_urut" class="mb-2 block text-sm font-medium text-gray-900">Nomor Urut</label>
+                    <input id="nomor_urut" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:outline-none" placeholder="Masukkan nomor urut" value="{{ $candidate->nomor_urut }}" disabled />
+                </div>
+                <div>
+                    <label for="name" class="mb-2 block text-sm font-medium text-gray-900">Nama Kandidat</label>
+                    <input type="text" name="name" value="{{ $candidate->name }}" id="name" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan nama relawan" disabled />
+                </div>
+                <div>
+                    <label for="jenis_kelamin" class="mb-2 block text-sm font-medium text-gray-900">Jenis Kelamin</label>
+                    <input value="{{ $candidate->jenis_kelamin }}" id="partai" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan nama relawan" disabled />
+                </div>
+            </div>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <label for="partai" class="mb-2 block text-sm font-medium text-gray-900">Partai</label>
+                    <input value="{{ $candidate->partai }}" id="partai" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan nama relawan" disabled />
+                </div>
+                <div>
+                    <label for="tempat_tinggal" class="mb-2 block text-sm font-medium text-gray-900">Tempat Tinggal</label>
+                    <input value="{{ $candidate->tempat_tinggal }}" id="tempat_tinggal" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan nama relawan" disabled />
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

@@ -5,11 +5,6 @@
 @section('content')
     <x-sidebar />
     <div class="p-6 sm:ml-64">
-        @if (session('success'))
-            <div class="mb-4 rounded-lg bg-green-50 p-4 text-sm text-green-800" role="alert">
-                <span class="font-medium">{{ session('success') }}!</span>
-            </div>
-        @endif
         @if (session('error'))
             <div class="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800" role="alert">
                 <span class="font-medium">{{ session('error') }}!</span>
@@ -55,9 +50,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end gap-x-4">
-                    <button onclick="window.history.go(-1)" class="mb-4 mt-8 rounded-lg bg-neutral-400 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-neutral-500 focus:outline-none">Kembali</button>
-                    <button type="submit" class="mb-4 mt-8 rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-800 focus:outline-none">Tambah Candidate</button>
+                <div class="mt-8 flex justify-end gap-x-4">
+                    <button onclick="window.history.go(-1)" class="rounded-lg bg-neutral-400 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-neutral-500 focus:outline-none">Kembali</button>
+                    <button type="submit" class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-800 focus:outline-none">Tambah Candidate</button>
                 </div>
             </form>
         </div>

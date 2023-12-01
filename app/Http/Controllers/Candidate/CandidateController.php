@@ -40,7 +40,6 @@ class CandidateController extends Controller {
             } else {
                 $data = $this->candidate->paginate($perPage);
             }
-
             $totalRow = $data->count();
             if ($totalRow > 0) {
                 foreach ($data as $row) {
@@ -65,14 +64,14 @@ class CandidateController extends Controller {
                             ' . $row->tempat_tinggal . '
                         </td>
                         <td class="px-6 py-4">
-                            <div class="flex gap-x-4">
-                                <a href="/dashboard/admin/candidate/' . $row->id . '" class="flex justify-center rounded bg-primary p-2">
+                            <div class="flex gap-x-2">
+                                <a href="/dashboard/admin/candidate/' . $row->id . '" class="flex justify-center items-center rounded bg-primary p-2">
                                     <i class="bx bxs-info-circle text-xl leading-none text-white"></i>
                                 </a>
-                                <a href="/dashboard/admin/edit-candidate/' . $row->id . '" class="lex justify-center rounded bg-yellow-600 p-2">
+                                <a href="/dashboard/admin/candidate/edit/' . $row->id . '" class="flex justify-center items-center rounded bg-yellow-600 p-2">
                                     <i class="bx bxs-pencil text-xl leading-none text-white"></i>
                                 </a>
-                                <a href="#" onclick="handleDelete(' . $row->id . ')" class="flex justify-center rounded bg-red-600 p-2">
+                                <a href="#" onclick="handleDelete(' . $row->id . ')" class="flex justify-center items-center rounded bg-red-600 p-2">
                                     <i class="bx bxs-trash text-xl leading-none text-white"></i>
                                 </a>
                             </div>
@@ -94,7 +93,6 @@ class CandidateController extends Controller {
                 'table_data' => $output,
                 'pagination' => $data->links('pagination::tailwind')->toHtml(),
             );
-
             return response()->json($data);
         }
     }
@@ -114,7 +112,7 @@ class CandidateController extends Controller {
             $request->validate([
                 'name' => 'required',
                 'partai' => 'required',
-                'nomor_urut' => 'required',
+                'nomor_urut' => 'required|numeric',
                 'jenis_kelamin' => 'required',
                 'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
                 'tempat_tinggal' => 'required',
@@ -134,7 +132,6 @@ class CandidateController extends Controller {
 
             return redirect('dashboard/admin/candidate')->with('success', 'Data Berhasil Ditambahkan');
         } catch (Exception $e) {
-            dd($e);
             return back()->with('error', $e->getMessage());
         }
     }
@@ -168,7 +165,7 @@ class CandidateController extends Controller {
             $request->validate([
                 'name' => 'required',
                 'partai' => 'required',
-                'nomor_urut' => 'required',
+                'nomor_urut' => 'required|numeric',
                 'jenis_kelamin' => 'required',
                 'tempat_tinggal' => 'required',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',

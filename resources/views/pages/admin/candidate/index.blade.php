@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="relative overflow-x-auto sm:rounded-lg">
-            <table id="relawan" class="w-full text-left text-sm text-gray-500 rtl:text-right">
+            <table id="kandidat" class="w-full text-left text-sm text-gray-500 rtl:text-right">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-3">

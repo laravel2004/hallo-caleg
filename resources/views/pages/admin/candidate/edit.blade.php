@@ -6,16 +6,19 @@
     <x-sidebar />
     <div class="p-6 sm:ml-64">
         <div class="mb-8 flex items-center justify-between">
-            <h1 class="text-3xl font-semibold">Edit Candidate</h1>
+            <h1 class="text-3xl font-semibold">Edit Kandidat</h1>
         </div>
         <form action="{{ route('dashboard.candidate.update', $candidate->id) }}" class="flex flex-col gap-4" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+                <div class="pr-4">
+                    <img class="w-full rounded-lg object-cover sm:w-96 md:h-auto" src="{{ asset('storage/candidate/' . $candidate->image) }}" alt="{{ $candidate->name }}">
+                </div>
                 <div class="flex flex-col gap-4">
                     <div>
                         <label for="nomor_urut" class="mb-2 block text-sm font-medium text-gray-900">Nomor Urut</label>
-                        <input type="text" name="nomor_urut" id="nomor_urut" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:outline-none" placeholder="Masukkan nomor urut" value="{{ $candidate->name }}" required />
+                        <input type="text" name="nomor_urut" id="nomor_urut" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:outline-none" placeholder="Masukkan nomor urut" value="{{ $candidate->nomor_urut }}" required />
                     </div>
                     <div>
                         <label for="name" class="mb-2 block text-sm font-medium text-gray-900">Nama Kandidat</label>
@@ -47,10 +50,9 @@
                 </div>
             </div>
             <div class="flex justify-end gap-x-4">
-                <button onclick="window.history.go(-1)" class="mb-4 mt-8 rounded-lg bg-neutral-400 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-neutral-500 focus:outline-none">Kembali</button>
+                <a href="{{ route('dashboard.candidate.index') }}" class="mb-4 mt-8 rounded-lg bg-neutral-400 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-neutral-500 focus:outline-none">Kembali</a>
                 <button type="submit" class="mb-4 mt-8 rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-800 focus:outline-none">Simpan</button>
             </div>
         </form>
     </div>
-
 @endsection
