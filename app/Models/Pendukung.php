@@ -11,10 +11,11 @@ class Pendukung extends Model
 
     protected $fillable = [
         'name',
-        'nik',
+        'usia',
         'kec',
         'desa',
-        'detail_alamat',
+        'rt',
+        'rw',
         'tps_id',
         'user_id',
     ];

@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
             TPSSeeder::class,
         ]);
 
-        \App\Models\User::factory(20)->create();
-        \App\Models\Pendukung::factory(300)->create();
+        // \App\Models\User::factory(20)->create();
+        // \App\Models\Pendukung::factory(300)->create();
         // $this->call(TPSSeeder::class);
     }
 }

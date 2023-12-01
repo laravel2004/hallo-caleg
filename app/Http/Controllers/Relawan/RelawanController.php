@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Relawan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
+use App\Models\Penduduk;
 use App\Models\Pendukung;
 use App\Models\Quickcount;
 use App\Service\IndonesiaAreaService;
@@ -18,9 +19,11 @@ class RelawanController extends Controller {
      */
 
     private Pendukung $pendukung;
+    private Penduduk $penduduk;
 
-    public function __construct(Pendukung $pendukung) {
+    public function __construct(Pendukung $pendukung, Penduduk $penduduk) {
         $this->pendukung = $pendukung;
+        $this->penduduk = $penduduk;
     }
 
     public function dashboard() {
@@ -47,10 +50,11 @@ class RelawanController extends Controller {
             if ($query != '') {
                 $data = $this->pendukung->where('user_id', Auth::user()->id)->where(function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', '%' . $query . '%')
-                        ->orWhere('nik', 'like', '%' . $query . '%')
                         ->orWhere('kec', 'like', '%' . $query . '%')
-                        ->orWhere('desa', 'like', '%' . $query . '%')
-                        ->orWhere('detail_alamat', 'like', '%' . $query . '%');
+                        ->orWhere('usia', 'like', '%' . $query . '%')
+                        ->orWhere('rt', 'like', '%' . $query . '%')
+                        ->orWhere('rw', 'like', '%' . $query . '%')
+                        ->orWhere('desa', 'like', '%' . $query . '%');
                 })
                     ->paginate($perPage);
             } else {
@@ -66,16 +70,19 @@ class RelawanController extends Controller {
                             ' . $row->name . '
                         </th>
                         <td class="whitespace-nowrap px-6 py-4">
-                            ' . $row->nik . '
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4">
-                            ' . $row->detail_alamat . '
+                            ' . $row->usia . '
                         </td>
                         <td class="whitespace-nowrap px-6 py-4">
                             ' . $row->desa . '
                         </td>
                         <td class="whitespace-nowrap px-6 py-4">
                             ' . $row->kec . '
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->rt . '
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->rw . '
                         </td>
                         <td class="whitespace-nowrap px-6 py-4">
                             ' . $row->tps->name . '
@@ -113,6 +120,78 @@ class RelawanController extends Controller {
     /**
      * Show the form for creating a new resource.
      */
+
+     public function searchPenduduk(Request $request) {
+        if ($request->ajax()) {
+            $output = '';
+            $perPage = $request->get('perPage', 10);
+            $query = $request->get('query');
+
+            if ($query != '') {
+                $data = $this->penduduk->where(function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('name', 'like', '%' . $query . '%')
+                        ->orWhere('kec', 'like', '%' . $query . '%')
+                        ->orWhere('usia', 'like', '%' . $query . '%')
+                        ->orWhere('rt', 'like', '%' . $query . '%')
+                        ->orWhere('rw', 'like', '%' . $query . '%')
+                        ->orWhere('desa', 'like', '%' . $query . '%');
+                })
+                    ->paginate($perPage);
+            } else {
+                $data = $this->penduduk->paginate($perPage);
+            }
+
+            $totalRow = $data->count();
+            if ($totalRow > 0) {
+                foreach ($data as $row) {
+                    $output .= '
+                    <tr class="border-b odd:bg-white even:bg-gray-50">
+                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                            ' . $row->name . '
+                        </th>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->usia . '
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->desa . '
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->kec . '
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->rt . '
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->rw . '
+                        </td>
+                        <td class="flex items-center gap-x-2 px-6 py-4">
+                            <button type="submit" onclick="handleCreate(' . $row->id . ')" class="flex justify-center items-center rounded bg-yellow-600 p-2">
+                                <i class="bx bxs-pencil text-xl leading-none text-white"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    ';
+                }
+            } else {
+                $output .= '
+                <tr>
+                    <td colspan="7" class="py-8 text-center text-gray-500">
+                        Tidak ada data yang dapat ditampilkan.
+                    </td>
+                </tr>
+                ';
+            }
+
+            $data = array(
+                'table_data' => $output,
+                'pagination' => $data->links('pagination::tailwind')->toHtml(),
+            );
+
+            return response()->json($data);
+        }
+    }
+
+
     public function create() {
         return view('pages.relawan.pendukung.create');
     }
@@ -121,22 +200,24 @@ class RelawanController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-
         try {
-            $validateRequest = $request->validate([
-                'name' => 'required',
-                'nik' => 'required',
-                'kec' => 'required',
-                'desa' => 'required',
-                'detail_alamat' => 'nullable',
-                'user_id' => 'required',
-                'tps_id' => 'required',
+            $penduduk = $this->penduduk->find($request->id);
+            if(!$penduduk) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Penduduk not found',
+                ], 404);
+            }
+            $response = $this->pendukung->create([
+                'name' => $penduduk->name,
+                'usia' => $penduduk->usia,
+                'desa' => $penduduk->desa,
+                'kec' => $penduduk->kec,
+                'rt' => $penduduk->rt,
+                'rw' => $penduduk->rw,
+                'tps_id' => $request->tps_id,
+                'user_id' => $request->user_id,
             ]);
-            $validateRequest['kec'] = IndonesiaAreaService::getArea('district', $validateRequest['kec']);
-            $validateRequest['desa'] = IndonesiaAreaService::getArea('village', $validateRequest['desa']);
-
-
-            $pendukung = $this->pendukung->create($validateRequest);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Pendukung created successfully',

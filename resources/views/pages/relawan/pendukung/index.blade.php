@@ -33,16 +33,19 @@
                             Nama
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            NIK
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Alamat
+                            Usia
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Desa
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Kecamatan
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            RT
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            RW
                         </th>
                         <th scope="col" class="px-6 py-3">
                             TPS
