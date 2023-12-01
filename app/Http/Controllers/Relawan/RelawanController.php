@@ -8,6 +8,7 @@ use App\Service\IndonesiaAreaService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class RelawanController extends Controller {
@@ -22,7 +23,39 @@ class RelawanController extends Controller {
     }
 
     public function dashboard() {
-        return view('pages.relawan.index');
+        $user = Auth::user();
+
+        // Ambil data tanggal 14 hari terakhir
+        $endDate = now();
+        $startDate = now()->subDays(14);
+        // Query untuk mendapatkan data jumlah pendukung per hari
+        $data = Pendukung::whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->get();
+
+        $categories = $data->pluck('date')->toArray();
+        $countData = $data->pluck('count')->toArray();
+
+        $chartData = [
+            'chart' => [
+                'type' => 'line'
+            ],
+            'series' => [
+                [
+                    'name' => 'Jumlah Pendukung',
+                    'data' => $countData,
+                ],
+            ],
+            'xaxis' => [
+                'categories' => $categories,
+            ],
+        ];
+
+        $chartJson = json_encode($chartData);
+
+        return view('pages.relawan.index', compact('user', 'chartJson'));
     }
 
     public function index() {

@@ -45,6 +45,6 @@ class User extends Authenticatable {
     ];
 
     public function pendukungs() {
-        return $this->hasMany(Pendukung::class);
+        return $this->hasMany(Pendukung::class, 'user_id');
     }
 }
