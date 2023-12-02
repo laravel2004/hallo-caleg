@@ -6,7 +6,7 @@
     <x-sidebar />
     <div class="p-6 sm:ml-64">
         <div class="mb-8 flex items-center justify-between">
-            <h1 class="text-3xl font-semibold">List Penduduk</h1>
+            <h1 class="text-3xl font-semibold">Tambah Pendukung</h1>
             <a href="{{ route('dashboard.relawan.pendukung') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Back</a>
         </div>
         <div class="mb-6 flex items-center justify-between">
@@ -48,6 +48,9 @@
                             RW
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            PILIH TPS
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Action
                         </th>
                     </tr>
@@ -76,11 +79,11 @@
                 success: function(data) {
                     $('tbody').html(data.table_data);
                     $('#pagination').html(data.pagination);
-                }
+                }   
             })
         }
 
-        function handleCreate($id) {
+        function handleCreate($id, $tps_id) {
             $.ajax({
                 url: "{{ route('dashboard.relawan.pendukung.store') }}",
                 method: "POST",
@@ -90,7 +93,7 @@
                 data: {
                     id: $id,
                     user_id : {{ Auth::user()->id }},
-                    tps_id : 1,
+                    tps_id : $tps_id,
                 },
                 dataType: 'json',
                 success: function(data) {

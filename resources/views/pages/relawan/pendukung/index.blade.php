@@ -100,7 +100,7 @@
         });
 
         function handleDelete(id) {
-            swal({
+            Swal.fire({
                 title: "Are you sure?",
                 text: "Once deleted, you will not be able to recover this",
                 icon: "warning",

@@ -7,6 +7,7 @@ use App\Models\Candidate;
 use App\Models\Penduduk;
 use App\Models\Pendukung;
 use App\Models\Quickcount;
+use App\Models\TPS;
 use App\Service\IndonesiaAreaService;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,10 +21,12 @@ class RelawanController extends Controller {
 
     private Pendukung $pendukung;
     private Penduduk $penduduk;
+    private TPS $tps;
 
-    public function __construct(Pendukung $pendukung, Penduduk $penduduk) {
+    public function __construct(Pendukung $pendukung, Penduduk $penduduk, TPS $tps) {
         $this->pendukung = $pendukung;
         $this->penduduk = $penduduk;
+        $this->tps = $tps;
     }
 
     public function dashboard() {
@@ -91,9 +94,9 @@ class RelawanController extends Controller {
                             <a href="/dashboard/relawan/pendukung/edit/' . $row->id . '" class="flex justify-center items-center rounded bg-yellow-600 p-2">
                                 <i class="bx bxs-pencil text-xl leading-none text-white"></i>
                             </a>
-                            <a href="#" onclick="handleDelete(' . $row->id . ')" class="flex justify-center items-center rounded bg-red-600 p-2">
+                            <button onclick="handleDelete(' . $row->id . ')" class="flex justify-center items-center rounded bg-red-600 p-2">
                                 <i class="bx bxs-trash text-xl leading-none text-white"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
                     ';
@@ -143,7 +146,21 @@ class RelawanController extends Controller {
 
             $totalRow = $data->count();
             if ($totalRow > 0) {
+                for($i = 49027; $i <=49039;$i++) {
+                    $district[] = [
+                        "id" => $i,
+                        "name" => IndonesiaAreaService::getArea('village', $i), 
+                    ];
+                }
                 foreach ($data as $row) {
+                    $village_id = array_search($row->desa, array_column($district, 'name'));
+                    $tps = $this->tps->where('village_id', $district[$village_id]['id'])->get();
+                    $selectOptions = '';
+                    foreach ($tps as $item) {
+                        // dd($item);
+                        $selectOptions .= '<option value="' . $item->id . '">' . $item->name . '</option>';
+                    }
+                    // dd($selectOptions);
                     $output .= '
                     <tr class="border-b odd:bg-white even:bg-gray-50">
                         <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
@@ -164,12 +181,33 @@ class RelawanController extends Controller {
                         <td class="whitespace-nowrap px-6 py-4">
                             ' . $row->rw . '
                         </td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            <select id="tps_id'.$row->id.'" name="tps_id" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <option value="" >Pilih TPS</option>
+                                ' . $selectOptions .'
+                            </select>
+                        </td>
                         <td class="flex items-center gap-x-2 px-6 py-4">
-                            <button type="submit" onclick="handleCreate(' . $row->id . ')" class="flex justify-center items-center rounded bg-yellow-600 p-2">
-                                <i class="bx bxs-pencil text-xl leading-none text-white"></i>
+                            <button type="submit" id="'. $row->id .'" class="flex justify-center text-white items-center rounded bg-green-600 p-2">
+                                Tambah
                             </button>
                         </td>
                     </tr>
+                    <script>
+                        $("#'.$row->id.'").on("click", function() {
+                            if($("#tps_id'.$row->id.'").val() == "") {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Pilih TPS terlebih dahulu!",
+                                })
+                            }
+                            else{
+                                handleCreate('.$row->id.', $("#tps_id'.$row->id.'").val());
+                                console.log($("#tps_id'.$row->id.'").val());
+                            }
+                        })
+                    </script>
                     ';
                 }
             } else {
@@ -207,6 +245,19 @@ class RelawanController extends Controller {
                     'status' => 'error',
                     'message' => 'Penduduk not found',
                 ], 404);
+            }
+            if($this->pendukung->where([
+                'name' => $penduduk->name,
+                'usia' => $penduduk->usia,
+                'desa' => $penduduk->desa,
+                'kec' => $penduduk->kec,
+                'rt' => $penduduk->rt,
+                'rw' => $penduduk->rw,
+            ])->exists()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Pendukung telah terdaftar menjadi pendukung',
+                ], 400);
             }
             $response = $this->pendukung->create([
                 'name' => $penduduk->name,
