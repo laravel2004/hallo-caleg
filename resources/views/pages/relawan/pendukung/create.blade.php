@@ -50,7 +50,7 @@
             <input type="hidden" id="user" name="user_id" value="{{ Auth::user()->id }}" />
             <div class="mt-8 flex justify-end gap-x-4">
                 <a href="{{ route('dashboard.relawan.pendukung') }}" class="rounded-lg bg-neutral-400 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-neutral-500 focus:outline-none">Kembali</a>
-                <button type="submit" class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-800 focus:outline-none">Tambah Candidate</button>
+                <button type="submit" class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-800 focus:outline-none">Tambah Pendukung</button>
             </div>
         </form>
     </div>

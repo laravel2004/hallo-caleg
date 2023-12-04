@@ -31,7 +31,8 @@ class RelawanController extends Controller {
         $endDate = now();
         $startDate = now()->subDays(14);
         // Query untuk mendapatkan data jumlah pendukung per hari
-        $data = Pendukung::whereBetween('created_at', [$startDate, $endDate])
+        $data = Pendukung::where('user_id', Auth::user()->id)
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date')
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
@@ -46,12 +47,15 @@ class RelawanController extends Controller {
             ],
             'series' => [
                 [
-                    'name' => 'Jumlah Pendukung',
+                    'name' => 'Perolehan Pendukung',
                     'data' => $countData,
                 ],
             ],
             'xaxis' => [
                 'categories' => $categories,
+            ],
+            'stroke' => [
+                'curve' => 'smooth',
             ],
         ];
 
@@ -258,6 +262,4 @@ class RelawanController extends Controller {
             ], 500);
         }
     }
-
-    
 }

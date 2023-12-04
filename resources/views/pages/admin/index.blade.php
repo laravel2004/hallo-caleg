@@ -16,7 +16,7 @@
                 <p class="font-normal text-gray-700">{{ $pendukungCount }} Orang</p>
             </div>
             <div class="block rounded-lg border border-gray-200 bg-white p-6 shadow">
-                <h5 class="mb-2 text-xl font-semibold text-gray-900">Jumlah Relawan</h5>
+                <h5 class="mb-2 text-xl font-semibold text-gray-900">Jumlah Kandidat</h5>
                 <p class="font-normal text-gray-700">{{ $candidateCount }} Orang</p>
             </div>
         </div>
