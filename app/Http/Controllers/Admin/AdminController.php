@@ -304,8 +304,9 @@ class AdminController extends Controller {
             if ($query != '') {
                 $data = $this->pendukung->where(function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', '%' . $query . '%')
-                        ->orWhere('nik', 'like', '%' . $query . '%')
-                        ->orWhere('detail_alamat', 'like', '%' . $query . '%')
+                        ->orWhere('usia', 'like', '%' . $query . '%')
+                        ->orWhere('rt', 'like', '%' . $query . '%')
+                        ->orWhere('rw', 'like', '%' . $query . '%')
                         ->orWhere('desa', 'like', '%' . $query . '%')
                         ->orWhere('kec', 'like', '%' . $query . '%');
                 })
@@ -322,14 +323,17 @@ class AdminController extends Controller {
                         <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
                             ' . $row->name . '
                         </th>
-                        <td class="px-6 py-4">
-                            ' . $row->nik . '
-                        </td>
-                        <td class="px-6 py-4">
-                            ' . $row->detail_alamat . '
-                        </td>
+                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                            ' . $row->usia . '
+                        </th>
                         <td class="px-6 py-4">
                             ' . $row->desa . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->rt . '
+                        </td>
+                        <td class="px-6 py-4">
+                            ' . $row->rw . '
                         </td>
                         <td class="px-6 py-4">
                             ' . $row->kec . '

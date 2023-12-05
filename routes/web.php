@@ -61,11 +61,11 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/admin/relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
             // hapus relawan
             Route::delete('/admin/relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
-
+            
             // pendukung
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
             Route::get('/admin/pendukung/search', [AdminController::class, 'searchPendukung'])->name('admin.search.pendukung');
-
+            
             // search kandidat
             Route::get('/admin/candidate/search', [CandidateController::class, 'search'])->name('candidate.search');
             // tambah relawan
@@ -82,9 +82,11 @@ Route::middleware(['auth'])->group(function () {
             // hapus relawan
             Route::delete('/admin/candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
         });
-
+        
         Route::middleware(['checkRole:1'])->group(function () {
             Route::get('/relawan', [RelawanController::class, 'dashboard'])->name('relawan');
+            // search penduduk
+            Route::get('relawan/search-penduduk', [RelawanController::class, 'searchPenduduk'])->name('relawan.penduduk.search');
             Route::get('/relawan/pendukung', [RelawanController::class, 'index'])->name('relawan.pendukung');
             Route::get('/relawan/pendukung/search', [RelawanController::class, 'search'])->name('relawan.pendukung.search');
             Route::get('/relawan/pendukung/create', [RelawanController::class, 'create'])->name('relawan.pendukung.create');
