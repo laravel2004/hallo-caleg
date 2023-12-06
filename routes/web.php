@@ -6,6 +6,7 @@ use App\Http\Controllers\Candidate\CandidateController;
 use App\Http\Controllers\Quickcount\QuickcountController;
 use App\Http\Controllers\Relawan\RelawanController;
 use App\Http\Controllers\Util\IndonesiaAreaController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,16 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/', function () {
+    if (Auth::user()->role == 0) {
+        return redirect()->route('dashboard.admin');
+    } else if (Auth::user()->role == 1) {
+        return redirect()->route('dashboard.relawan');
+    } else {
+        return redirect()->route('auth.login');
+    }
+});
 
 Route::controller(AuthController::class)
     ->name('auth.')
@@ -61,11 +72,11 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/admin/relawan/{id}', [AdminController::class, 'update'])->name('admin.update');
             // hapus relawan
             Route::delete('/admin/relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
-            
+
             // pendukung
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
             Route::get('/admin/pendukung/search', [AdminController::class, 'searchPendukung'])->name('admin.search.pendukung');
-            
+
             // search kandidat
             Route::get('/admin/candidate/search', [CandidateController::class, 'search'])->name('candidate.search');
             // tambah relawan
@@ -82,7 +93,7 @@ Route::middleware(['auth'])->group(function () {
             // hapus relawan
             Route::delete('/admin/candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
         });
-        
+
         Route::middleware(['checkRole:1'])->group(function () {
             Route::get('/relawan', [RelawanController::class, 'dashboard'])->name('relawan');
             // search penduduk
