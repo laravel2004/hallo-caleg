@@ -8,7 +8,7 @@
         <div class="mb-6 flex items-center justify-between">
             <h1 class="text-3xl font-semibold">Daftar Pendukung</h1>
         </div>
-        <div class="mb-6 flex items-center justify-between">
+        <div class="mb-6 flex flex-col items-start justify-between gap-y-3 md:flex-row md:items-center">
             <div class="flex items-center gap-x-4">
                 <p class="flex-grow text-sm">Show per page(s):</p>
                 <select id="showPerPages" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
@@ -17,7 +17,7 @@
                     <option value="100">100</option>
                 </select>
             </div>
-            <div class="relative flex-shrink">
+            <div class="relative flex-shrink self-stretch">
                 <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
                     <i class='bx bx-search text-xl text-gray-500'></i>
                 </div>
