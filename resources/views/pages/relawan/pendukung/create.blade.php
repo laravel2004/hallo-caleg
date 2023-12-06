@@ -79,7 +79,7 @@
                 success: function(data) {
                     $('tbody').html(data.table_data);
                     $('#pagination').html(data.pagination);
-                }   
+                }
             })
         }
 
@@ -92,8 +92,8 @@
                 },
                 data: {
                     id: $id,
-                    user_id : {{ Auth::user()->id }},
-                    tps_id : $tps_id,
+                    user_id: {{ Auth::user()->id }},
+                    tps_id: $tps_id,
                 },
                 dataType: 'json',
                 success: function(data) {

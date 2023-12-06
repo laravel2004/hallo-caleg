@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
 use App\Models\Pendukung;
 use App\Models\User;
 use Dotenv\Validator;
 use Exception;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -98,7 +100,40 @@ class AdminController extends Controller {
     }
 
     public function dashboard() {
-        return view('pages.admin.index');
+        $relawanCount = $this->user->where('role', 1)->count();
+        $pendukungCount = $this->pendukung->count();
+        $candidateCount = Candidate::count();
+        $topRelawan = $this->user->where('role', 1)->withCount('pendukungs')
+            ->orderByDesc('pendukungs_count')
+            ->limit(5)
+            ->get();
+
+        $categories = [];
+        $data = [];
+
+        foreach ($topRelawan as $relawan) {
+            $categories[] = $relawan->name;
+            $data[] = $relawan->pendukungs_count;
+        }
+
+        $chartData = [
+            'chart' => [
+                'type' => 'bar'
+            ],
+            'series' => [
+                [
+                    'name' => 'Jumlah Pendukung',
+                    'data' => $data,
+                ],
+            ],
+            'xaxis' => [
+                'categories' => $categories,
+            ],
+        ];
+
+        $chartJson = json_encode($chartData);
+
+        return view('pages.admin.index', compact('relawanCount', 'pendukungCount', 'candidateCount', 'chartJson'));
     }
 
     /**
