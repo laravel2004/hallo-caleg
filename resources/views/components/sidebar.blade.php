@@ -5,7 +5,7 @@
     </svg>
 </button>
 
-<aside id="default-sidebar" class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0" aria-label="Sidebar">
+<aside id="default-sidebar" class="fixed left-0 top-0 z-40 h-full w-64 -translate-x-full transition-transform sm:translate-x-0" aria-label="Sidebar">
     <div class="flex h-full flex-col justify-between overflow-y-auto border-r border-neutral-200 bg-gray-50 px-3 py-4">
         <div>
             <div class="mb-4 flex items-center gap-x-4 px-2">
