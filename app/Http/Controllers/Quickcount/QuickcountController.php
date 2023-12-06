@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Quickcount;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Quickcount;
+use App\Models\TPS;
+use Exception;
 use Illuminate\Http\Request;
 
 class QuickcountController extends Controller
@@ -15,16 +17,17 @@ class QuickcountController extends Controller
 
     private Quickcount $quickcount;
     private Candidate $candidate;
+    private TPS $tps;
 
-    public function __construct(Quickcount $quickcount, Candidate $candidate) {
+    public function __construct(Quickcount $quickcount, Candidate $candidate, TPS $tps) {
         $this->quickcount = $quickcount;
         $this->candidate = $candidate;
+        $this->tps = $tps;
     }
 
     public function index()
     {
         $quickcounts = $this->quickcount->all();
-        $candidates = $this->candidate->all();
         return view('pages.relawan.quickcount.index', compact('quickcounts', 'candidates'));
     }
 
@@ -33,7 +36,7 @@ class QuickcountController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -41,7 +44,37 @@ class QuickcountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $validateRequest = $request->validate([
+                'candidate_id' => 'required',
+                'total' => 'required',
+                'tps_id' => 'required',
+            ]);
+
+            $isExist = $this->tps->find($validateRequest['tps_id']);
+            if(!$isExist) {
+                $this->quickcount->create([
+                    'candidate_id' => $validateRequest['candidate_id'],
+                    'total' => $validateRequest['total'],
+                    'tps_id' => $validateRequest['tps_id'],
+                ]);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Data Berhasil ditambah',
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data TPS sudah ada',
+            ]);
+        }
+        catch(Exception $e){
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -49,7 +82,9 @@ class QuickcountController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = $this->quickcount->where('candidate_id', $id)->get();
+        return view('pages.relawan.quickcount.show', compact('data'));
+
     }
 
     /**
@@ -57,7 +92,8 @@ class QuickcountController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $quickcount = $this->candidate->find($id);
+        return view('pages.relawan.quickcount.edit', compact('quickcount'));
     }
 
     /**
@@ -65,7 +101,32 @@ class QuickcountController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try{
+            $validateRequest = $request->validate([
+                'candidate_id' => 'required',
+                'total' => 'required',
+                'tps_id' => 'required',
+            ]);
+
+            $quickcount = $this->tps->find($validateRequest['tps_id']);
+            $quickcount->update([
+                'candidate_id' => $validateRequest['candidate_id'],
+                'total' => $validateRequest['total'],
+                'tps_id' => $validateRequest['tps_id'],
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data Berhasil diupdate',
+            ]);
+
+        }
+        catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
