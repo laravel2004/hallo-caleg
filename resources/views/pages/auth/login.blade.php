@@ -29,9 +29,9 @@
                     <input type="password" name="password" id="password" placeholder="••••••••" class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900" required>
                 </div>
                 <button type="submit" class="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 w-full rounded-lg bg-primary px-5 py-3 text-center text-base font-medium text-white focus:ring-4 sm:w-auto">Masuk</button>
-                <div class="text-sm font-medium text-gray-500">
+                {{-- <div class="text-sm font-medium text-gray-500">
                     Belum punya akun? <a href="{{ route('auth.register') }}" class="text-primary-700 cursor-pointer hover:underline">Buat akun</a>
-                </div>
+                </div> --}}
             </form>
         </div>
     </div>

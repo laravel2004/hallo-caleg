@@ -37,8 +37,8 @@ Route::controller(AuthController::class)
         Route::get('/login', 'login')->name('login');
         Route::post('/login', 'loginPost')->name('loginPost');
         Route::get('/logout', 'logout')->name('logout');
-        Route::get('/register', 'register')->name('register');
-        Route::post('/register', 'registerPost')->name('registerPost');
+        // Route::get('/register', 'register')->name('register');
+        // Route::post('/register', 'registerPost')->name('registerPost');
     });
 
 Route::prefix('utility')
