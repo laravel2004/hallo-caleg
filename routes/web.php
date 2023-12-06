@@ -21,13 +21,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if (Auth::user()->role == 0) {
-        return redirect()->route('dashboard.admin');
-    } else if (Auth::user()->role == 1) {
-        return redirect()->route('dashboard.relawan');
-    } else {
-        return redirect()->route('auth.login');
+    if (Auth::user()) {
+        if (Auth::user()->role == 0)
+            return redirect()->route('dashboard.admin');
+        else if (Auth::user()->role == 1)
+            return redirect()->route('dashboard.relawan');
     }
+    return redirect()->route('auth.login');
 });
 
 Route::controller(AuthController::class)
