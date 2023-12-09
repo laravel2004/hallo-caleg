@@ -161,7 +161,7 @@ class RelawanController extends Controller {
      * Show the form for creating a new resource.
      */
 
-     public function searchPenduduk(Request $request) {
+    public function searchPenduduk(Request $request) {
         if ($request->ajax()) {
             $output = '';
             $perPage = $request->get('perPage', 10);
@@ -170,6 +170,7 @@ class RelawanController extends Controller {
             if ($query != '') {
                 $data = $this->penduduk->where(function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', '%' . $query . '%')
+                        ->orWhere('jenis_kelamin', 'like', '%' . $query . '%')
                         ->orWhere('kec', 'like', '%' . $query . '%')
                         ->orWhere('usia', 'like', '%' . $query . '%')
                         ->orWhere('rt', 'like', '%' . $query . '%')
@@ -183,10 +184,10 @@ class RelawanController extends Controller {
 
             $totalRow = $data->count();
             if ($totalRow > 0) {
-                for($i = 49027; $i <=49039;$i++) {
+                for ($i = 49027; $i <= 49039; $i++) {
                     $district[] = [
                         "id" => $i,
-                        "name" => IndonesiaAreaService::getArea('village', $i), 
+                        "name" => IndonesiaAreaService::getArea('village', $i),
                     ];
                 }
                 foreach ($data as $row) {
@@ -194,15 +195,16 @@ class RelawanController extends Controller {
                     $tps = $this->tps->where('village_id', $district[$village_id]['id'])->get();
                     $selectOptions = '';
                     foreach ($tps as $item) {
-                        // dd($item);
                         $selectOptions .= '<option value="' . $item->id . '">' . $item->name . '</option>';
                     }
-                    // dd($selectOptions);
                     $output .= '
                     <tr class="border-b odd:bg-white even:bg-gray-50">
                         <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
                             ' . $row->name . '
                         </th>
+                        <td class="whitespace-nowrap px-6 py-4">
+                            ' . $row->jenis_kelamin . '
+                        </td>
                         <td class="whitespace-nowrap px-6 py-4">
                             ' . $row->usia . '
                         </td>
@@ -219,20 +221,20 @@ class RelawanController extends Controller {
                             ' . $row->rw . '
                         </td>
                         <td class="whitespace-nowrap px-6 py-4">
-                            <select id="tps_id'.$row->id.'" name="tps_id" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <select id="tps_id' . $row->id . '" name="tps_id" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
                                 <option value="" >Pilih TPS</option>
-                                ' . $selectOptions .'
+                                ' . $selectOptions . '
                             </select>
                         </td>
                         <td class="flex items-center gap-x-2 px-6 py-4">
-                            <button type="submit" id="'. $row->id .'" class="flex justify-center text-white items-center rounded bg-green-600 p-2">
+                            <button type="submit" id="' . $row->id . '" class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-800 focus:outline-none">
                                 Tambah
                             </button>
                         </td>
                     </tr>
                     <script>
-                        $("#'.$row->id.'").on("click", function() {
-                            if($("#tps_id'.$row->id.'").val() == "") {
+                        $("#' . $row->id . '").on("click", function() {
+                            if($("#tps_id' . $row->id . '").val() == "") {
                                 Swal.fire({
                                     icon: "error",
                                     title: "Oops...",
@@ -240,8 +242,8 @@ class RelawanController extends Controller {
                                 })
                             }
                             else{
-                                handleCreate('.$row->id.', $("#tps_id'.$row->id.'").val());
-                                console.log($("#tps_id'.$row->id.'").val());
+                                handleCreate(' . $row->id . ', $("#tps_id' . $row->id . '").val());
+                                console.log($("#tps_id' . $row->id . '").val());
                             }
                         })
                     </script>
@@ -276,36 +278,59 @@ class RelawanController extends Controller {
      */
     public function store(Request $request) {
         try {
-            $penduduk = $this->penduduk->find($request->id);
-            if(!$penduduk) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Penduduk not found',
-                ], 404);
+            if ($request->has('id')) {
+                $penduduk = $this->penduduk->find($request->id);
+                if (!$penduduk) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Penduduk not found',
+                    ], 404);
+                }
+
+                if ($this->pendukung->where([
+                    'name' => $penduduk->name,
+                    'jenis_kelamin' => $penduduk->jenis_kelamin,
+                    'usia' => $penduduk->usia,
+                    'desa' => $penduduk->desa,
+                    'kec' => $penduduk->kec,
+                    'rt' => $penduduk->rt,
+                    'rw' => $penduduk->rw,
+                ])->exists()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Pendukung telah terdaftar menjadi pendukung',
+                    ], 400);
+                }
+
+                $this->pendukung->create([
+                    'name' => $penduduk->name,
+                    'jenis_kelamin' => $penduduk->jenis_kelamin,
+                    'usia' => $penduduk->usia,
+                    'desa' => $penduduk->desa,
+                    'kec' => $penduduk->kec,
+                    'rt' => $penduduk->rt,
+                    'rw' => $penduduk->rw,
+                    'tps_id' => $request->tps_id,
+                    'user_id' => $request->user_id,
+                ]);
+            } else {
+                $validateRequest = $request->validate([
+                    'name' => 'required',
+                    'jenis_kelamin' => 'required',
+                    'usia' => 'required',
+                    'kec' => 'required',
+                    'desa' => 'required',
+                    'rt' => 'required',
+                    'rw' => 'required',
+                    'user_id' => 'required',
+                    'tps_id' => 'required',
+                ]);
+                $validateRequest['kec'] = IndonesiaAreaService::getArea('district', $validateRequest['kec']);
+                $validateRequest['desa'] = IndonesiaAreaService::getArea('village', $validateRequest['desa']);
+
+                $pendukung = $this->pendukung->create($validateRequest);
             }
-            if($this->pendukung->where([
-                'name' => $penduduk->name,
-                'usia' => $penduduk->usia,
-                'desa' => $penduduk->desa,
-                'kec' => $penduduk->kec,
-                'rt' => $penduduk->rt,
-                'rw' => $penduduk->rw,
-            ])->exists()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Pendukung telah terdaftar menjadi pendukung',
-                ], 400);
-            }
-            $response = $this->pendukung->create([
-                'name' => $penduduk->name,
-                'usia' => $penduduk->usia,
-                'desa' => $penduduk->desa,
-                'kec' => $penduduk->kec,
-                'rt' => $penduduk->rt,
-                'rw' => $penduduk->rw,
-                'tps_id' => $request->tps_id,
-                'user_id' => $request->user_id,
-            ]);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Pendukung created successfully',

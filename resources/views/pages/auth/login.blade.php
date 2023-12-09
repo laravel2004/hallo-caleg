@@ -22,7 +22,7 @@
                 @csrf
                 <div>
                     <label for="email" class="mb-2 block text-sm font-medium text-gray-900">E-mail</label>
-                    <input type="email" name="email" id="email" class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm" placeholder="name@company.com" required>
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm" placeholder="name@company.com" required>
                 </div>
                 <div>
                     <label for="password" class="mb-2 block text-sm font-medium text-gray-900"> Password</label>

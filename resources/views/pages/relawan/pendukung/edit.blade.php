@@ -15,30 +15,42 @@
             <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
                 <div class="flex flex-col gap-4">
                     <div>
-                        <label for="nik" class="mb-2 block text-sm font-medium text-gray-900">NIK</label>
-                        <input type="text" id="nik" name="nik" value="{{ $pendukung->nik }}" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan NIK pendukung" />
-                    </div>
-                    <div>
                         <label for="name" class="mb-2 block text-sm font-medium text-gray-900">Nama</label>
                         <input type="text" id="name" name="name" value="{{ $pendukung->name }}" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan nama pendukung " />
                     </div>
                     <div>
-                        <label for="detail_alamat" class="mb-2 block text-sm font-medium text-gray-900">Detail Alamat</label>
-                        <textarea type="text" id="detail_alamat" name="detail_alamat" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan Detail alamat ">{{ $pendukung->detail_alamat }}</textarea>
+                        <label for="jenis_kelamin" class="mb-2 block text-sm font-medium text-gray-900">Jenis Kelamin</label>
+                        <select id="jenis_kelamin" name="jenis_kelamin" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
+                            <option selected disabled>Pilih Jenis Kelamin</option>
+                            <option @if ($pendukung->jenis_kelamin == 'L' || $pendukung->jenis_kelamin == 'l') selected @endif value="L">Laki-Laki</option>
+                            <option @if ($pendukung->jenis_kelamin == 'P' || $pendukung->jenis_kelamin == 'p') selected @endif value="P">Perempuan</option>
+                        </select>
                     </div>
-                </div>
-                <div class="flex flex-col gap-4">
+                    <div>
+                        <label for="usia" class="mb-2 block text-sm font-medium text-gray-900">Usia</label>
+                        <input type="number" id="usia" name="usia" value="{{ $pendukung->usia }}" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan usia pendukung " />
+                    </div>
                     <div>
                         <label for="kecamatan" class="mb-2 block text-sm font-medium text-gray-900">Kecamatan</label>
                         <select id="kecamatan" name="kec" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
                             <option selected disabled>Pilih Kecamatan</option>
                         </select>
                     </div>
+                </div>
+                <div class="flex flex-col gap-4">
                     <div>
                         <label for="desa" class="mb-2 block text-sm font-medium text-gray-900">Desa</label>
                         <select id="desa" name="desa" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" data-selected="{{ $pendukung->kec }}">
                             <option selected disabled>Pilih Desa</option>
                         </select>
+                    </div>
+                    <div>
+                        <label for="rt" class="mb-2 block text-sm font-medium text-gray-900">RT</label>
+                        <input type="number" id="rt" name="rt" value="{{ $pendukung->rt }}" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan RT pendukung, contoh: 1" />
+                    </div>
+                    <div>
+                        <label for="rw" class="mb-2 block text-sm font-medium text-gray-900">RW</label>
+                        <input type="number" id="rw" name="rw" value="{{ $pendukung->rw }}" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan RW pendukung, contoh: 1" />
                     </div>
                     <div>
                         <label for="tps" class="mb-2 block text-sm font-medium text-gray-900">TPS</label>
