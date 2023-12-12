@@ -21,7 +21,7 @@ class Pendukung extends Model {
     ];
 
     public function tps() {
-        return $this->belongsTo(Tps::class, 'tps_id', 'id');
+        return $this->belongsTo(TPS::class, 'tps_id', 'id');
     }
 
     public function user() {
