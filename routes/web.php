@@ -6,6 +6,7 @@ use App\Http\Controllers\Candidate\CandidateController;
 use App\Http\Controllers\Quickcount\QuickcountController;
 use App\Http\Controllers\Relawan\RelawanController;
 use App\Http\Controllers\Util\IndonesiaAreaController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    if (Auth::user()) {
+        if (Auth::user()->role == 0)
+            return redirect()->route('dashboard.admin');
+        else if (Auth::user()->role == 1)
+            return redirect()->route('dashboard.relawan');
+    }
+    return redirect()->route('auth.login');
+});
+
 Route::controller(AuthController::class)
     ->name('auth.')
     ->prefix('/auth')
@@ -26,8 +37,8 @@ Route::controller(AuthController::class)
         Route::get('/login', 'login')->name('login');
         Route::post('/login', 'loginPost')->name('loginPost');
         Route::get('/logout', 'logout')->name('logout');
-        Route::get('/register', 'register')->name('register');
-        Route::post('/register', 'registerPost')->name('registerPost');
+        // Route::get('/register', 'register')->name('register');
+        // Route::post('/register', 'registerPost')->name('registerPost');
     });
 
 Route::prefix('utility')
@@ -80,7 +91,7 @@ Route::middleware(['auth'])->group(function () {
             // hapus relawan
             Route::delete('/admin/candidate/{id}', [CandidateController::class, 'destroy'])->name('candidate.destroy');
         });
-        
+
         Route::middleware(['checkRole:1'])->group(function () {
             Route::get('/relawan', [RelawanController::class, 'dashboard'])->name('relawan');
             // search penduduk

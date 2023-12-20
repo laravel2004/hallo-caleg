@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pendukung extends Model
-{
+class Pendukung extends Model {
     use HasFactory;
 
     protected $fillable = [
         'name',
         'usia',
+        'jenis_kelamin',
         'kec',
         'desa',
         'rt',
@@ -21,7 +21,7 @@ class Pendukung extends Model
     ];
 
     public function tps() {
-        return $this->belongsTo(Tps::class, 'tps_id', 'id');
+        return $this->belongsTo(TPS::class, 'tps_id', 'id');
     }
 
     public function user() {
