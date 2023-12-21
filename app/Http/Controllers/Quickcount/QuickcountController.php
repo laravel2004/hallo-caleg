@@ -28,6 +28,7 @@ class QuickcountController extends Controller
     public function index()
     {
         $quickcounts = $this->quickcount->all();
+        $candidates = $this->candidate->all();
         return view('pages.relawan.quickcount.index', compact('quickcounts', 'candidates'));
     }
 

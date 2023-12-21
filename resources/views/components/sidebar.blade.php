@@ -41,6 +41,14 @@
                             </a>
                         </li>
                     @endif
+                    @if (Auth::user()->role == 1)
+                        <li>
+                            <a href="{{ route('dashboard.quickcount.index') }}" class="{{ request()->is('dashboard/relawan/quickcount*') ? 'bg-gray-200' : 'hover:bg-gray-200' }} group flex items-center rounded-lg p-2 transition-colors duration-200">
+                                <i class='bx bx-user-circle text-3xl text-[#6b7280]'></i>
+                                <span class="ms-3 text-gray-900">Quickcount</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
