@@ -99,7 +99,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/relawan/pendukung', [RelawanController::class, 'index'])->name('relawan.pendukung');
             Route::get('/relawan/pendukung/search', [RelawanController::class, 'search'])->name('relawan.pendukung.search');
             Route::get('/relawan/pendukung/create', [RelawanController::class, 'create'])->name('relawan.pendukung.create');
+            Route::get('relawan/pendukung/create-manual', [RelawanController::class, 'createManual'])->name('relawan.pendukung.create-manual');
             Route::post('/relawan/pendukung', [RelawanController::class, 'store'])->name('relawan.pendukung.store');
+            Route::post('relawan/pendukung/store-manual', [RelawanController::class, 'storeManual'])->name('relawan.pendukung.store-manual');
             Route::get('/relawan/pendukung/edit/{id}', [RelawanController::class, 'edit'])->name('relawan.pendukung.edit');
             Route::put('/relawan/pendukung/{id}', [RelawanController::class, 'update'])->name('relawan.pendukung.update');
             Route::delete('/relawan/pendukung/{id}', [RelawanController::class, 'destroy'])->name('relawan.pendukung.destroy');

@@ -366,10 +366,12 @@ class RelawanController extends Controller {
         try {
             $validateRequest = $request->validate([
                 'name' => 'required',
-                'nik' => 'required|numeric',
+                'jenis_kelamin' => 'required',
+                'usia' => 'required',
                 'kec' => 'required',
                 'desa' => 'required',
-                'detail_alamat' => 'nullable',
+                'rt' => 'required',
+                'rw' => 'required',
                 'user_id' => 'required',
                 'tps_id' => 'required',
             ]);
@@ -378,7 +380,15 @@ class RelawanController extends Controller {
             $validateRequest['desa'] = IndonesiaAreaService::getArea('village', $validateRequest['desa']);
 
             $pendukung = $this->pendukung->find($id);
-            $pendukung->update($validateRequest);
+            $response = $pendukung->update($validateRequest);
+
+
+            if (!$response) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Pendukung tidak dapat diupdate',
+                ], 404);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -418,5 +428,108 @@ class RelawanController extends Controller {
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function createManual(Request $request) {
+        return view('pages.relawan.pendukung.create-manual');
+    }
+
+    public function storeManual (Request $request) {
+        try {
+            $validateRequest = $request->validate([
+                'name' => 'required',
+                'jenis_kelamin' => 'required',
+                'usia' => 'required',
+                'kec' => 'required',
+                'desa' => 'required',
+                'rt' => 'required',
+                'rw' => 'required',
+                'user_id' => 'required',
+                'tps_name' => 'required',
+            ]);
+
+            $validateRequest['tps_name'] = 'TPS_'.$validateRequest['tps_name'];
+
+            if ($this->pendukung->where([
+                'name' => $validateRequest['name'],
+                'jenis_kelamin' => $validateRequest['jenis_kelamin'],
+                'usia' => $validateRequest['usia'],
+                'desa' => IndonesiaAreaService::getArea('village', $validateRequest['desa']),
+                'kec' => IndonesiaAreaService::getArea('district', $validateRequest['kec']),
+                'rt' => $validateRequest['rt'],
+                'rw' => $validateRequest['rw'],
+            ])->exists()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Pendukung telah terdaftar menjadi pendukung',
+                ], 400);
+            }
+            else {
+                if(TPS::where([
+                    'name' => $validateRequest['tps_name'],
+                    'village_id' => $validateRequest['desa'],
+                ])->exists()) {
+                    $tps_id = TPS::where([
+                        'name' => $validateRequest['tps_name'],
+                        'village_id' => $validateRequest['desa'],
+                    ])->first()->id;
+    
+                    $validateRequest['kec'] = IndonesiaAreaService::getArea('district', $validateRequest['kec']);
+                    $validateRequest['desa'] = IndonesiaAreaService::getArea('village', $validateRequest['desa']);
+    
+                    $this->pendukung->create([
+                        'name' => $validateRequest['name'],
+                        'jenis_kelamin' => $validateRequest['jenis_kelamin'],
+                        'usia' => $validateRequest['usia'],
+                        'kec' => $validateRequest['kec'],
+                        'desa' => $validateRequest['desa'],
+                        'rt' => $validateRequest['rt'],
+                        'rw' => $validateRequest['rw'],
+                        'user_id' => $validateRequest['user_id'],
+                        'tps_id' => $tps_id,
+                    ]);
+    
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Pendukung Berhasil ditambahkan',
+                    ], 201);
+                    
+                }
+                else {
+                    $tps =TPS::create([
+                        'name' => $validateRequest['tps_name'],
+                        'village_id' => $validateRequest['desa'],
+                        'alamat' => 'Tidak diketahui'
+                    ]);
+    
+                    if($tps) {
+                        $validateRequest['kec'] = IndonesiaAreaService::getArea('district', $validateRequest['kec']);
+                        $validateRequest['desa'] = IndonesiaAreaService::getArea('village', $validateRequest['desa']);
+                        $this->pendukung->create([
+                            'name' => $validateRequest['name'],
+                            'jenis_kelamin' => $validateRequest['jenis_kelamin'],
+                            'usia' => $validateRequest['usia'],
+                            'kec' => $validateRequest['kec'],
+                            'desa' => $validateRequest['desa'],
+                            'rt' => $validateRequest['rt'],
+                            'rw' => $validateRequest['rw'],
+                            'user_id' => $validateRequest['user_id'],
+                            'tps_id' => $tps->id,
+                        ]);
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => 'Pendukung Berhasil ditambahkan',
+                        ], 201);
+                    }
+                } 
+            }
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
     }
 }
