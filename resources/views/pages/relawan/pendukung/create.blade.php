@@ -9,7 +9,10 @@
             <h1 class="text-3xl font-semibold">Tambah Pendukung</h1>
             <a href="{{ route('dashboard.relawan.pendukung') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Back</a>
         </div>
-        <div class="mb-6 flex items-center justify-between">
+        <div class="relative flex-shrink">
+            <a href="{{ route('dashboard.relawan.pendukung.create-manual') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Tambah Manual</a>
+        </div>
+        <div class="mb-6 mt-5 flex items-center justify-between">
             <div class="flex items-center gap-x-4">
                 <p class="flex-grow text-sm">Show per page(s):</p>
                 <select id="showPerPages" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500">
@@ -24,12 +27,9 @@
                 </div>
                 <input type="search" id="search" name="search" class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari data disini...">
             </div>
-            <div class="relative flex-shrink">
-                <a href="{{ route('dashboard.relawan.pendukung.create-manual') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Tambah Manual</a>
-            </div>
         </div>
         <div class="relative overflow-x-auto sm:rounded-lg">
-            <table id="relawan" class="w-full text-left text-sm text-gray-500 rtl:text-right">
+            <table id="relawan" class="w-full text-left text-sm mt-5  text-gray-500 rtl:text-right">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-3">
