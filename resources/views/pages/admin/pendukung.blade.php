@@ -38,13 +38,13 @@
                             Desa
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Kecamatan
-                        </th>
-                        <th scope="col" class="px-6 py-3">
                             RT
                         </th>
                         <th scope="col" class="px-6 py-3">
                             RW
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            KECAMATAN
                         </th>
                         <th scope="col" class="px-6 py-3">
                             TPS
