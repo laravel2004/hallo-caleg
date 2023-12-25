@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
             // hapus relawan
             Route::delete('/admin/relawan/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
             // pendukung
+            Route::get('/admin/pendukung/export', [AdminController::class, 'exportPendukung'])->name('admin.export.pendukung');
             Route::get('/admin/pendukung', [AdminController::class, 'indexPendukung'])->name('admin.pendukung');
             Route::get('/admin/pendukung/search', [AdminController::class, 'searchPendukung'])->name('admin.search.pendukung');
             // search kandidat

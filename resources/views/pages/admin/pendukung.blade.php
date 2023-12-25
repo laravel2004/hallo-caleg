@@ -5,8 +5,9 @@
 @section('content')
     <x-sidebar />
     <div class="p-6 sm:ml-64">
-        <div class="mb-6 flex items-center justify-between">
+        <div class="mb-6 flex flex-col items-start justify-between gap-y-3 md:flex-row md:items-center">
             <h1 class="text-3xl font-semibold">Daftar Pendukung</h1>
+            <a href="{{ route('dashboard.admin.export.pendukung') }}" class="rounded-lg bg-primary px-5 py-2.5 text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none">Export Excel</a>
         </div>
         <div class="mb-6 flex flex-col items-start justify-between gap-y-3 md:flex-row md:items-center">
             <div class="flex items-center gap-x-4">

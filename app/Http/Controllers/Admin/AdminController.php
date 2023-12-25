@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\PendukungExport;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Pendukung;
@@ -12,6 +13,7 @@ use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller {
@@ -364,5 +366,9 @@ class AdminController extends Controller {
 
             return response()->json($data);
         }
+    }
+
+    public function exportPendukung() {
+        return Excel::download(new PendukungExport, 'pendukung.xlsx');
     }
 }
