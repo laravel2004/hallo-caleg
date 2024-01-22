@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Relawan;
 
+use App\Exports\PendukungExportRelawan;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Penduduk;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class RelawanController extends Controller {
@@ -434,7 +436,7 @@ class RelawanController extends Controller {
         return view('pages.relawan.pendukung.create-manual');
     }
 
-    public function storeManual (Request $request) {
+    public function storeManual(Request $request) {
         try {
             $validateRequest = $request->validate([
                 'name' => 'required',
@@ -448,7 +450,7 @@ class RelawanController extends Controller {
                 'tps_name' => 'required',
             ]);
 
-            $validateRequest['tps_name'] = 'TPS_'.$validateRequest['tps_name'];
+            $validateRequest['tps_name'] = 'TPS_' . $validateRequest['tps_name'];
 
             if ($this->pendukung->where([
                 'name' => $validateRequest['name'],
@@ -463,9 +465,8 @@ class RelawanController extends Controller {
                     'status' => 'error',
                     'message' => 'Pendukung telah terdaftar menjadi pendukung',
                 ], 400);
-            }
-            else {
-                if(TPS::where([
+            } else {
+                if (TPS::where([
                     'name' => $validateRequest['tps_name'],
                     'village_id' => $validateRequest['desa'],
                 ])->exists()) {
@@ -473,10 +474,10 @@ class RelawanController extends Controller {
                         'name' => $validateRequest['tps_name'],
                         'village_id' => $validateRequest['desa'],
                     ])->first()->id;
-    
+
                     $validateRequest['kec'] = IndonesiaAreaService::getArea('district', $validateRequest['kec']);
                     $validateRequest['desa'] = IndonesiaAreaService::getArea('village', $validateRequest['desa']);
-    
+
                     $this->pendukung->create([
                         'name' => $validateRequest['name'],
                         'jenis_kelamin' => $validateRequest['jenis_kelamin'],
@@ -488,21 +489,19 @@ class RelawanController extends Controller {
                         'user_id' => $validateRequest['user_id'],
                         'tps_id' => $tps_id,
                     ]);
-    
+
                     return response()->json([
                         'status' => 'success',
                         'message' => 'Pendukung Berhasil ditambahkan',
                     ], 201);
-                    
-                }
-                else {
-                    $tps =TPS::create([
+                } else {
+                    $tps = TPS::create([
                         'name' => $validateRequest['tps_name'],
                         'village_id' => $validateRequest['desa'],
                         'alamat' => 'Tidak diketahui'
                     ]);
-    
-                    if($tps) {
+
+                    if ($tps) {
                         $validateRequest['kec'] = IndonesiaAreaService::getArea('district', $validateRequest['kec']);
                         $validateRequest['desa'] = IndonesiaAreaService::getArea('village', $validateRequest['desa']);
                         $this->pendukung->create([
@@ -521,15 +520,19 @@ class RelawanController extends Controller {
                             'message' => 'Pendukung Berhasil ditambahkan',
                         ], 201);
                     }
-                } 
+                }
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
 
+    public function exportPendukung() {
+        $relawanName = Auth::user()->name;
+
+        return Excel::download(new PendukungExportRelawan, 'Pendukung - ' . $relawanName . '.xlsx');
     }
 }
