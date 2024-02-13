@@ -99,6 +99,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('relawan/search-penduduk', [RelawanController::class, 'searchPenduduk'])->name('relawan.penduduk.search');
             Route::get('/relawan/pendukung', [RelawanController::class, 'index'])->name('relawan.pendukung');
             Route::get('/relawan/pendukung/search', [RelawanController::class, 'search'])->name('relawan.pendukung.search');
+            Route::get('/relawan/quickcount/search', [QuickcountController::class, 'search'])->name('relawan.quickcount.search');
             Route::get('/relawan/pendukung/create', [RelawanController::class, 'create'])->name('relawan.pendukung.create');
             Route::get('relawan/pendukung/create-manual', [RelawanController::class, 'createManual'])->name('relawan.pendukung.create-manual');
             Route::post('/relawan/pendukung', [RelawanController::class, 'store'])->name('relawan.pendukung.store');
@@ -107,7 +108,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/relawan/pendukung/edit/{id}', [RelawanController::class, 'edit'])->name('relawan.pendukung.edit');
             Route::put('/relawan/pendukung/{id}', [RelawanController::class, 'update'])->name('relawan.pendukung.update');
             Route::delete('/relawan/pendukung/{id}', [RelawanController::class, 'destroy'])->name('relawan.pendukung.destroy');
-            Route::resource('relawan/quickcount', QuickcountController::class);
+            Route::resource('relawan/quickcount', QuickcountController::class)->except(['create']);
+            Route::get('/relawan/quickcount/vote', [QuickcountController::class, 'vote'])->name('relawan.quickcount.vote');
         });
     });
 });
