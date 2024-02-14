@@ -240,7 +240,7 @@ class QuickcountController extends Controller
                 return view('pages.relawan.quickcount.show', compact('profile', 'tps', 'desa', 'id', 'vote'));
             }
         }
-        return view('pages.relawan.quickcount.show', compact('profile', 'id'));
+        return view('pages.relawan.quickcount.show', compact('profile', 'id', 'vote'));
 
     }
 
